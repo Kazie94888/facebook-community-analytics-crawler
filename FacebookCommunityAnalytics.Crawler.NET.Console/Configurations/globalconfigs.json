@@ -1,0 +1,51 @@
+{
+  "GlobalConfig": {
+    "Logging": {
+      "LogLevel": {
+        "Default": "Debug",
+        "System": "Information",
+        "Microsoft": "Information"
+      }
+    },
+    "CrawlConfig": {
+      "ApiGet2FACodeUrl": "http://2fa.live/tok/",
+      "IpLookUpUrl":"https://whatismyipaddress.com/",
+      "RootUrl": "https://mbasic.facebook.com",
+      "TempFilesPath": "D:\\test\\images",
+      "UserDataDirRoot": "D:\\FBCA.NET\\UserDataDir",
+      "BannedAccountsLogPath": "log-banned-accounts",
+      "ActionDelay": 500,
+      "TypingDelay": 10,
+      "BreakDelay": 5000,
+      "ScrollTimeout": 5000,
+      
+      "BatchSize_Max_Default": 5,
+      "BatchSize_Max_SelectiveGroupPost":10,
+      "BatchSize_Max_TiktokSelectiveVideo": 10,
+      "BatchSize_Max_AutoLike" : 10,
+      "BatchSize_Max_GroupPost":5,
+      "BatchSize_Max_GroupUserPost":5,
+      "BatchSize_Max_PagePost":5,
+
+      "Crawl_MaxThread_SelectiveGroupPost":3,
+      "Crawl_MaxThread_AutoLike": 3,
+      "Crawl_MaxThread_TiktokSelectiveVideo": 3,
+      "Crawl_MaxThread_TiktokMCNVideo": 3,
+      "Crawl_MaxThread_GroupPost":1,
+      "Crawl_MaxThread_GroupUserPost":1,
+      "Crawl_MaxThread_PagePost": 1,
+      "Crawl_MaxThread_JoinGroup": 1,
+      "Crawl_MaxThread_TiktokVideo": 3
+    },
+    "ApiConfig": {
+      "ApiUrl": "ApiUrl",
+      "ApiEmailUrl" : "ApiEmailUrl",
+      "AuthUrl": "AuthUrl",
+      "ViotpUrl": "ViotpUrl"
+    },
+    "TiktokConfig": {
+      "DailyReportEmails": [
+      ]
+    }
+  }
+}

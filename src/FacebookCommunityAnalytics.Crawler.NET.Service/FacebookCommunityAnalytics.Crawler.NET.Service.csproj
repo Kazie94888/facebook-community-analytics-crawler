@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FacebookCommunityAnalytics.Crawler.NET.Core\FacebookCommunityAnalytics.Crawler.NET.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\DELL\.nuget\packages\autoitx.dotnet\3.3.14.5\build\AutoItX3.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\DELL\.nuget\packages\autoitx.dotnet\3.3.14.5\build\AutoItX3_x64.dll" />
+  </ItemGroup>
+
+</Project>
