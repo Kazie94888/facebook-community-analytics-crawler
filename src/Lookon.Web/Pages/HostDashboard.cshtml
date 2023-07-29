@@ -1,0 +1,172 @@
+﻿@page
+@using System.Globalization
+@using LookOn.Consts
+@using LookOn.Core.Extensions
+@using LookOn.Enums
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using LookOn.Localization
+@using LookOn.Web.Menus
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Widgets
+@using Volo.Abp.AuditLogging.Web.Pages.Shared.Components.AverageExecutionDurationPerDayWidget
+@using Volo.Abp.AuditLogging.Web.Pages.Shared.Components.ErrorRateWidget
+@using Volo.Saas.Host.Pages.Shared.Components.SaasEditionPercentageWidget
+@using Volo.Saas.Host.Pages.Shared.Components.SaasLatestTenantsWidget
+@inject IHtmlLocalizer<LookOnResource> L
+@inject IWidgetManager WidgetManager
+@model LookOn.Web.Pages.HostDashboardModel
+@{
+    ViewBag.PageTitle = "Dashboard";
+}
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = L["Dashboard"].Value;
+    PageLayout.Content.MenuItemName = LookOnMenus.HostDashboard;
+    var merchant = Model.Merchant ?? new();
+    var merchantSubscription = Model.MerchantSubscription ?? new();
+    var merchantStore = Model.MerchantStore ?? new();
+}
+
+@section scripts {
+    <abp-script src="/Pages/HostDashboard.js"/>
+}
+
+@section styles {
+    <abp-style src="/Pages/HostDashboard.css"/>
+}
+
+@if (merchant != null && merchantSubscription != null)
+{
+    <abp-row>
+        <abp-column size-md="_12">
+            @* <div class="text-center font-size-25">@L["Page1.Title"]</div> *@
+            <h1 class="text-center display-bl mb-5">
+                <b>@merchant?.Name</b>
+            </h1>
+        </abp-column>
+    </abp-row>
+    <abp-card class="card-border-top-color-green">
+        <abp-card-body>
+            <abp-row>
+                <abp-column size-md="_4" class="border-right">
+                    <h3>
+                        <span abp-badge-pill="Success" ab class="mb-5">@L[$"Enum:SubscriptionStatus:{merchantSubscription.SubscriptionStatus.ToInt()}"]</span>
+                    </h3>
+                    <div class="display-bl">
+                        <h4 class="veek-support-current-font subscript-subtitle">@L["SubscriptionStatus:Title"]</h4>
+                        <div class="font-size-25 display-bl">@L[$"Enum:SubscriptionStatus:{merchantSubscription.SubscriptionType.ToInt()}"]</div>
+                    </div>
+                    <div class="display-bl mt-3">
+                        <h4 class="veek-support-current-font subscript-subtitle">@L["SubscriptionType:Total"]</h4>
+                        @if (merchantSubscription.SubscriptionType == SubscriptionType.Starter)
+                        {
+                            <div class="font-size-25 display-bl">@SubscriptionTypePrice.Starter</div>
+                        }
+                        @if (merchantSubscription.SubscriptionType == SubscriptionType.Growth)
+                        {
+                            <div class="font-size-25 display-bl">@SubscriptionTypePrice.Growth</div>
+                        }
+                        @if (merchantSubscription.SubscriptionType == SubscriptionType.Plus)
+                        {
+                            <div class="font-size-25 display-bl">@SubscriptionTypePrice.Plus</div>
+                        }
+                        @if (merchantSubscription.SubscriptionType == SubscriptionType.Enterprise)
+                        {
+                            <div class="font-size-25 display-bl">@SubscriptionTypePrice.Enterprise</div>
+                        }
+                    </div>
+                </abp-column>
+                <abp-column size-md="_8">
+                    <abp-row class="padding-left-50">
+                        <abp-column size-md="_6">
+                            <h4 class="veek-support-current-font subscript-subtitle">@L["StartDateTime"]</h4>
+                            <div class="font-size-25 display-bl">@merchantSubscription.StartDateTime?.ToShortDateString()</div>
+                        </abp-column>
+                        <abp-column size-md="_6">
+                            <h4 class="veek-support-current-font subscript-subtitle">@L["EndDateTime"]</h4>
+                            <div class=" font-size-25 display-bl">@merchantSubscription.EndDateTime?.ToShortDateString()</div>
+                        </abp-column>
+                        <abp-column size-md="_12" class="mt-3">
+                            <h4 class="veek-support-current-font subscript-subtitle">@L["SubscriptionPaidType"]</h4>
+                            <div class="font-size-25 display-bl"></div>
+                        </abp-column>
+                        <abp-column size-md="_12" class="mt-3">
+                            <h4 class="veek-support-current-font subscript-subtitle">@L["InvoiceEmail"]</h4>
+                            <div class="font-size-25 display-bl">@merchant.Email</div>
+                        </abp-column>
+                    </abp-row>
+                </abp-column>
+            </abp-row>
+        </abp-card-body>
+        <hr class="divider"/>
+        <abp-card-body>
+            <abp-row>
+                <abp-column size-md="_12">
+                    <h4 class="veek-support-current-font subscript-subtitle">@L["SubscriptionUpgradeTitle"]</h4>
+                </abp-column>
+                <abp-column size-md="_12">
+                    <a href="#" class="btn btn-dark">
+                        <i class="fa fa-solid fa-link"></i> @L["SubscriptionUpgradeButton"]
+                    </a>
+                </abp-column>
+            </abp-row>
+        </abp-card-body>
+    </abp-card>
+
+    <abp-row>
+        <abp-column size-md="_6">
+            <abp-card>
+                <abp-card-body>
+                    <abp-row>
+                        <abp-column size-md="_12">
+                            <h1 class="font-size-25 display-bl">@merchantStore.Name</h1>
+                        </abp-column>
+                        <abp-column size-md="_12" class="mt-3">
+                            <img class="float-end" src="images/haravan-logo.png" width="100" alt="haravan logo"/>
+                        </abp-column>
+                    </abp-row>
+                </abp-card-body>
+                <abp-card-footer class="d-flex justify-content-end">
+                    <button class="btn btn-dark display-inline-bl">
+                        <i class="fa fa-chart-bar"></i>
+                    </button>
+                    <button class="btn btn-dark display-inline-bl mg-left-10">
+                        <i class="fa fa-share"></i>
+                    </button>
+                </abp-card-footer>
+            </abp-card>
+        </abp-column>
+    </abp-row>
+    <abp-row>
+        <abp-column size-md="_6">
+            <div class="d-flex community-page-connect text-center align-items-center justify-content-center">
+                <button id="btnConnectCommunity" class="box btn btn-dark btn-lg">
+                    <i class="fa fa-solid fa-link"></i> @L["Dashboard.ConnectCommunityPageButton"]
+                </button>
+            </div>
+        </abp-column>
+        <abp-column size-md="_6">
+            <abp-card>
+                <abp-card-body>
+                    <abp-row>
+                        <abp-column size-md="_12">
+                            <h1 class="font-size-25 display-bl">@merchantStore.Name</h1>
+                        </abp-column>
+                        <abp-column size-md="_12" class="mt-3">
+                            <img class="float-end" src="images/haravan-logo.png" width="100" alt="haravan logo"/>
+                        </abp-column>
+                    </abp-row>
+                </abp-card-body>
+                <abp-card-footer class="d-flex justify-content-end">
+                    <button class="btn btn-dark display-inline-bl">
+                        <i class="fa fa-chart-bar"></i>
+                    </button>
+                    <button class="btn btn-dark display-inline-bl mg-left-10">
+                        <i class="fa fa-share"></i>
+                    </button>
+                </abp-card-footer>
+            </abp-card>
+        </abp-column>
+    </abp-row>
+}

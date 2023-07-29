@@ -1,0 +1,43 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using LookOn.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using LookOn.MerchantUsers;
+@using System.Globalization
+@inject IHtmlLocalizer<LookOnResource> L
+@model LookOn.Web.Pages.MerchantStaffs.CreateModalModel
+@{
+    Layout = null;
+}
+
+<form data-ajaxForm="true" asp-page="/MerchantStaffs/CreateModal" autocomplete="off">
+    <abp-modal>
+        <abp-modal-header title="@L["NewMerchantStaff"].Value"></abp-modal-header>
+
+        <abp-modal-body>
+
+            @if (Model.IsAdminRole())
+            {
+                <abp-select asp-for="MerchantUser.AppUserId" asp-items="Model.AppUserLookupListRequired" label="@L["User"].Value"/> <label for="Merchant_Name">@L["Merchant"] *</label>
+                                                                                                                                                                              
+                <div class="input-group mb-3">
+                    <input hidden value="@(Model.MerchantUser.MerchantId == default ? string.Empty : Model.MerchantUser.MerchantId.ToString())" id="Merchant_Id" name="MerchantUser.MerchantId"/>
+                    <input type="text" id="Merchant_Name" class="form-control" disabled>
+                    <abp-button button-type="Info" id="MerchantLookupOpenButton" class="text-light">@L["Pick"]</abp-button>
+                    <abp-button button-type="Danger" class="lookupCleanButton ms-1">
+                        <i class="fa fa-times"></i>
+                    </abp-button>
+                </div>
+            }
+            else
+            {
+                <abp-input asp-for="EmailStaff" label="@L["CreateModalModel.EmailStaff"].Value"/>
+                <input hidden value="@(Model.MerchantUser.MerchantId == default ? "" : Model.MerchantUser.MerchantId.ToString())" id="Merchant_Id" name="MerchantUser.MerchantId"/>
+            }
+            
+            <abp-input asp-for="MerchantUser.IsActive"/>
+        </abp-modal-body>
+
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel | AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>

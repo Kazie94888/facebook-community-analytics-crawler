@@ -1,0 +1,203 @@
+@page
+@using LookOn.Core.Extensions
+@using LookOn.Core.Shared.Enums
+@using LookOn.Enums
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using LookOn.Web.Menus
+@using Microsoft.AspNetCore.Mvc.Localization
+@using LookOn.Localization
+@using LookOn.Web.Pages.Shared
+@using Newtonsoft.Json
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
+@using Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
+@inject IHtmlLocalizer<LookOnResource> L
+@model LookOn.Web.Pages.Insights.IndexModel
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.MenuItemName = LookOnMenus.Insight;
+}
+
+@section styles {
+    <abp-style src="/Pages/TransationInsights/Index.css"/>
+}
+
+@section scripts
+{
+    @if (Model.Merchant.IsTermAccepted)
+    {
+        @if (Model.IsActiveSubscription || !Model.IsEndTrial)
+        {
+            <abp-script src="/Pages/Insights/Components/insight.js"/>
+        }
+        else
+        {
+            <abp-script src="/Pages/MerchantSubscriptions/CheckSubscription.js"/>
+        }
+    }
+}
+
+@if (Model.Merchant.IsTermAccepted)
+{
+    @if (Model.IsCommunityIntegration)
+    {
+        @if (Model.IsCommunityVerified)
+        {
+            <abp-column class="mb-5" size-md="_12">
+                <abp-row>
+                    <abp-column size-md="_8" size-sm="_12">
+                        <div class="text-left veek-support-current-font name-page-title">@L["Page1.Title"]</div>
+                        <div class="merchant-name-title">
+                            @Model.Merchant?.Name
+                        </div>
+                    </abp-column>
+
+                    <abp-column size-md="_4" size-sm="_12" class="text-right justify-content-sm-center" id="TimeFrameContainer" style="display: none">
+                        <button id="ButtonWeekly" class="btn btn-dark btn-border-radius-20">@L[$"TimeFrameType:{TimeFrameType.Weekly.To<int>()}"].Value</button>
+                        <button id="ButtonMonthly" class="btn btn-outline-dark btn-border-radius-20">@L[$"TimeFrameType:{TimeFrameType.Monthly.To<int>()}"].Value</button>
+                        <h5 id="TimeFrameLabel" class="mt-2 veek-support-current-font "></h5>
+                    </abp-column>
+                </abp-row>
+            </abp-column>
+            <abp-card style="border-radius: 12px">
+                <abp-card-header class="component-card-header">
+                    <abp-row class="mb-2">
+                        <div class="note-icon-header">
+                            <img src="images/icons/Frame 11624.png" alt="">
+                        </div>
+                    </abp-row>
+                </abp-card-header>
+                <abp-card-body class="component-card-body">
+                    <abp-row class="mb-3">
+                        <abp-column>
+                            <abp-row>
+                                <abp-column size-md="_11" size-sm="_10" class="component-card-body-title">
+                                    <div class="display-inline-bl font-size-30">@L["VennChart.Insight.Title"]</div>
+                                </abp-column>
+                                <abp-column size-md="_1" size-sm="_2">
+                                    <button type="button" class="btn question-tooltip-margin" data-toggle="tooltip" data-popper-placement="left" title="@L["VennChart.Insight.Hint"].Value">
+                                        <span class="lo-help-icon"></span>
+                                    </button>
+                                </abp-column>
+                            </abp-row>
+                        </abp-column>
+
+                        @if (!Model.IsTrial)
+                        {
+                            if (Model.IsActiveSubscription)
+                            {
+                                <abp-column size-lg="_12">
+                                    <abp-row>
+                                        <abp-column size-lg="_7" size-md="_12" class="padding-left-chart">
+                                            <abp-column id="venn-wrapper" class="d-flex">
+                                                <div id="venn">
+                                                </div>
+                                            </abp-column>
+                                        </abp-column>
+                                        <abp-column size-lg="_5" size-md="_12" class="d-flex">
+                                            <div id="venn-filter" class="align-self-center border-left-insight-type">
+                                                <abp-column class="margin-left-border-blue-bell">
+                                                    <abp-row style="margin: 0">
+                                                        @foreach (var insightTypeFilter in Enum.GetValues<InsightTypeFilter>())
+                                                        {
+                                                            if (insightTypeFilter.ToInt() == 5)
+                                                            {
+                                                                <div class="form-check">
+                                                                    <input value="@insightTypeFilter.ToInt()" class="form-check-input" type="radio" name="insightTypeFilter" id="insightTypeFilter_@insightTypeFilter.GetName()" style="border: 3px solid black;">
+                                                                    <label class="form-check-label insight-data-type-form" for="insightTypeFilter_@insightTypeFilter.GetName()">
+                                                                        <span name="insightTypeText" data-val="@insightTypeFilter.ToInt()">@L[$"Enum:InsightTypeFilter:{insightTypeFilter.ToInt()}"]</span>
+                                                                    </label>
+                                                                    <img src="images/icons/intersect-color.png" alt="">
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="form-check mb-3">
+                                                                    @if (insightTypeFilter.ToInt() == 1)
+                                                                    {
+                                                                        <input value="@insightTypeFilter.ToInt()" class="form-check-input" type="radio" name="insightTypeFilter" id="insightTypeFilter_@insightTypeFilter.GetName()" style="border: 3px solid black;" checked="checked">
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <input value="@insightTypeFilter.ToInt()" class="form-check-input" type="radio" name="insightTypeFilter" id="insightTypeFilter_@insightTypeFilter.GetName()" style="border: 3px solid black;">
+                                                                    }
+
+                                                                    <label class="form-check-label insight-data-type-form" for="insightTypeFilter_@insightTypeFilter.GetName()">
+                                                                        <span name="insightTypeText" data-val="@insightTypeFilter.ToInt()">@L[$"Enum:InsightTypeFilter:{insightTypeFilter.ToInt()}"]</span>
+                                                                    </label>
+                                                                    @if (insightTypeFilter.ToInt() == 1 || insightTypeFilter.ToInt() == 2)
+                                                                    {
+                                                                        <img src="images/icons/ecom-color.png" alt="">
+                                                                    }
+                                                                    @if (insightTypeFilter.ToInt() == 3 || insightTypeFilter.ToInt() == 4)
+                                                                    {
+                                                                        <img src="images/icons/social-color.png" alt="">
+                                                                    }
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </abp-row>
+                                                </abp-column>
+                                            </div>
+                                        </abp-column>
+                                    </abp-row>
+                                </abp-column>
+                            }
+                        }
+                    </abp-row>
+                </abp-card-body>
+            </abp-card>
+
+            <div id="insightData"></div>
+            <abp-row class="text-center sticky-bottom">
+                <abp-column>
+                    <a class="btn btn-outline-dark display-inline-bl" style="float: right" href="#">
+                        <i class="fas fa-2x fa-angle-up"></i>
+                    </a>
+                </abp-column>
+            </abp-row>
+        }
+        else
+        {
+            @await Html.PartialAsync("Shared/CommunityNoVerifyNotification", null, ViewData)
+        }
+    }
+    else
+    {
+        @await Html.PartialAsync("Shared/CommunityIntegrationNotificationModal", new CommunityIntegrationNotificationModel { IsCommunityIntegration = false }, ViewData)
+    }
+}
+
+
+@* <style> *@
+@* .venn-tooltip { *@
+@*   position: absolute; *@
+@*   text-align: center; *@
+@*   width: 128px; *@
+@*   height: 30px; *@
+@*   background: #333; *@
+@*   color: #ddd; *@
+@*   padding: 2px; *@
+@*   border: 0; *@
+@*   border-radius: 8px; *@
+@*   opacity: 0; *@
+@* } *@
+@* </style> *@
+@{
+    <script src="/Pages/Insights/d3.v4.min.js"></script>
+    <script src="/Pages/Insights/venn.js"></script>
+    <script src="/Pages/Insights/index.js"></script>
+    <script>
+        var timeTitle = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.TimeTitle))');
+    </script>
+    @if (Model.InsightUser is not null)
+    {
+        <script>
+                var ecomUserCount = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.InsightUser.EcomUserCount))');
+                var socialUserCount = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.InsightUser.SocialUserCount))');
+                var intersectUserCount = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.InsightUser.IntersectUserCount))');
+                loadVennChart();
+            </script>
+    }
+}

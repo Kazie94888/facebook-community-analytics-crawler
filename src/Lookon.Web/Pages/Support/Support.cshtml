@@ -1,0 +1,33 @@
+@page "/support"
+@using LookOn.Localization
+@using LookOn.Web.Menus
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@inject IHtmlLocalizer<LookOnResource> L
+@inject IPageLayout PageLayout
+
+@{
+    PageLayout.Content.Title = L["Menu:Support"].Value;
+    PageLayout.Content.MenuItemName = LookOnMenus.Support;
+}
+
+<script type="text/javascript" src="~/Pages/Support/support.js"></script>
+<abp-card class="notification-card">
+    <abp-card-body>
+        <div style="display: flex;align-items: center;justify-content: center">
+            <div style="flex-basis: 20%;">
+                <img src="~/images/subscription-img.png" alt=""/>
+            </div>
+            <div style="padding-left: 20px;">
+                <h1 class="text-left">@L["Support.Header"]</h1>
+                <div>@L["Support.Content"]</div>
+                <div style="padding-top: 5%">
+                    <a class="text-decoration-none upgrade-subscription-button" href="https://lookon.vn" target="_blank">
+                        <abp-button class="btn btn-dark btn-border-radius-20 btn-hover-color-black" size="Medium">@L["Support.LearnMore"]</abp-button>
+                    </a>
+                    <button type="button" class="btn-feedback btn btn-dark btn-border-radius-20 btn-hover-color-black" style="margin-left: 20px">@L["Feedback.Button"]</button>
+                </div>
+            </div>
+        </div>
+    </abp-card-body>
+</abp-card>

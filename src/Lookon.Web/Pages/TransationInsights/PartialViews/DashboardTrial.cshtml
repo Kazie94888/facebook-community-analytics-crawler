@@ -1,0 +1,192 @@
+﻿@using System.Globalization
+@using LookOn.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
+@inject IHtmlLocalizer<LookOnResource> L
+
+<abp-card class="notification-card">
+    <abp-card-body class="text-center card-body">
+        <h2>@L["Trial.Header"]</h2>
+        <div>@L["Trial.Content"]</div>
+        <a href="https://lookon.vn/" target="_blank">lookon.vn</a>
+    </abp-card-body>
+</abp-card>
+<abp-row>
+    <abp-column size-xl="_3" size-md="_6" size-sm="_6">
+        <abp-card class="card-border-top-color-green">
+            <abp-card-body>
+                <abp-row>
+                    <abp-column size-md="_12" class="margin-bottom-25">
+                        <span class="veek-support-current-font ">@L["Page1.Overview.TotalOrders"]</span>
+                    </abp-column>
+                    <abp-column>
+                    </abp-column>
+                </abp-row>
+            </abp-card-body>
+        </abp-card>
+    </abp-column>
+    <abp-column size-xl="_3" size-md="_6" size-sm="_6">
+        <abp-card class="card-border-top-color-green">
+            <abp-card-body>
+                <abp-row>
+                    <abp-column size-md="_12" class="margin-bottom-25">
+                        <span class="veek-support-current-font ">@L["Page1.Overview.PurchasedUsers"]</span>
+                    </abp-column>
+                </abp-row>
+            </abp-card-body>
+        </abp-card>
+    </abp-column>
+    <abp-column size-xl="_3" size-md="_6" size-sm="_6">
+        <abp-card class="card-border-top-color-green">
+            <abp-card-body>
+                <abp-row>
+                    <abp-column size-md="_12" class="margin-bottom-25">
+                        <span class="veek-support-current-font ">@L["Page1.Overview.AOV"]</span>
+                    </abp-column>
+                </abp-row>
+            </abp-card-body>
+        </abp-card>
+    </abp-column>
+    <abp-column size-xl="_3" size-md="_6" size-sm="_6">
+        <abp-card class="card-border-top-color-green">
+            <abp-card-body>
+                <abp-row>
+                    <abp-column size-md="_12" class="margin-bottom-25">
+                        <span class="veek-support-current-font ">@L["Page1.Overview.CLV"]</span>
+                    </abp-column>
+                </abp-row>
+            </abp-card-body>
+        </abp-card>
+    </abp-column>
+</abp-row>
+<abp-row>
+    <abp-column size-xl="_3" size-md="_6" size-sm="_6">
+        <abp-card class="card-border-top-color-green">
+            <abp-card-body>
+                <abp-row>
+                    <abp-column size-md="_12" class="margin-bottom-25">
+                        <span class="veek-support-current-font ">@L["Page1.Overview.ReturnedOrderPercentage"]</span>
+                    </abp-column>
+                </abp-row>
+            </abp-card-body>
+        </abp-card>
+
+    </abp-column>
+    <abp-column size-xl="_3" size-md="_6" size-sm="_6">
+        <abp-card class="card-border-top-color-green">
+            <abp-card-body>
+                <abp-row>
+                    <abp-column size-md="_12" class="margin-bottom-25">
+                        <span class="veek-support-current-font ">@L["Page1.Overview.CancelledOrders"]</span>
+                    </abp-column>
+                </abp-row>
+            </abp-card-body>
+        </abp-card>
+
+    </abp-column>
+    <abp-column size-xl="_3" size-md="_6" size-sm="_6">
+        <abp-card class="card-border-top-color-green">
+            <abp-card-body>
+                <abp-row>
+                    <abp-column size-md="_12" class="margin-bottom-25">
+                        <span class="veek-support-current-font ">@L["Page1.Overview.RetentionRate"]</span>
+                    </abp-column>
+                </abp-row>
+            </abp-card-body>
+        </abp-card>
+
+    </abp-column>
+    <abp-column size-xl="_3" size-md="_6" size-sm="_6">
+        <abp-card class="card-border-top-color-green">
+            <abp-card-body>
+                <abp-row>
+                    <abp-column size-md="_12" class="margin-bottom-25">
+                        <span class="veek-support-current-font ">@L["Page1.Overview.AvgProductCountPerUser"]</span>
+                    </abp-column>
+                </abp-row>
+            </abp-card-body>
+        </abp-card>
+    </abp-column>
+</abp-row>
+
+<abp-card>
+    <abp-card-body>
+        <abp-row>
+            <abp-column size-md="_11">
+                <div class="display-inline-bl font-size-30">@L[$"Page1.DashboardTotalRevenue.{ViewData["TimeTitle"]}Title"]</div>
+            </abp-column>
+            <abp-column size-md="_1">
+                <abp-button class="display-inline-bl float-end shadow-none question-tooltip-margin question-tooltip-margin" abp-tooltip-left="@L[$"Page1.DashboardTotalRevenue.Hint"].Value">
+                    <span class="lo-help-icon"></span>
+                </abp-button>
+            </abp-column>
+            <abp-column>
+                <div style="display: flex;justify-content: space-around;padding: 3%;">
+                    @* <div style="flex-basis: 40%;"> *@
+                    @*     @L["Trial.TotalRevenue.PlaceHolder"] *@
+                    @* </div> *@
+                    <div class="veek-support-color-7-font font-size-16">
+                        @L["Trial.TotalRevenue.Hint"]
+                    </div>
+                </div>
+            </abp-column>
+        </abp-row>
+    </abp-card-body>
+</abp-card>
+
+<abp-row>
+    <abp-column size-xl="_6" size-md="_12">
+        <abp-card class="height-95-pc">
+            <abp-card-body>
+                <abp-row>
+                    <abp-column size-md="_11" size-sm="_10">
+                        <div class="display-inline-bl font-size-30">@L["Page1.DashboardTopProduct.Title"]</div>
+                    </abp-column>
+                    <abp-column size-md="_1" size-sm="_2">
+                        <abp-button class="display-inline-bl float-end shadow-none question-tooltip-margin" abp-tooltip-left="@L["Page1.DashboardTopProduct.Hint"].Value">
+                            <span class="lo-help-icon"></span>
+                        </abp-button>
+                    </abp-column>
+                    <abp-column>
+                        <div style="display: flex;justify-content: space-around;padding: 5%;">
+                            @* <div style="flex-basis: 40%;"> *@
+                            @*     @L["Trial.Product.PlaceHolder"] *@
+                            @* </div> *@
+                    <div class="veek-support-color-7-font font-size-16">
+                                @L["Trial.Product.Hint"]
+                            </div>
+                        </div>
+                    </abp-column>
+                </abp-row>
+            </abp-card-body>
+        </abp-card>
+    </abp-column>
+    <abp-column size-xl="_6" size-md="_12">
+        <abp-card class="height-95-pc">
+            <abp-card-body>
+                <abp-row>
+                    <abp-column size-md="_11" size-sm="_10">
+                        <div class="display-inline-bl font-size-30">@L["Page1.DashboardTotalRevenueByLocation.Title"]</div>
+                    </abp-column>
+                    <abp-column size-md="_1" size-sm="_2">
+                        <abp-button class="display-inline-bl float-end shadow-none question-tooltip-margin" abp-tooltip-left="@L["Page1.DashboardTotalRevenueByLocation.Hint"].Value">
+                            <span class="lo-help-icon"></span>
+                        </abp-button>
+                    </abp-column>
+                    <abp-column>
+                        <div style="display: flex;justify-content: space-around;padding: 5%;">
+                            @* <div style="flex-basis: 40%;"> *@
+                            @*     @L["Trial.Province.PlaceHolder"] *@
+                            @* </div> *@
+                    <div class="veek-support-color-7-font font-size-16">
+                                @L["Trial.Province.Hint"]
+                            </div>
+                        </div>
+                    </abp-column>
+                </abp-row>
+            </abp-card-body>
+        </abp-card>
+    </abp-column>
+</abp-row>

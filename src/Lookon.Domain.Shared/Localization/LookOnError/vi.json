@@ -1,0 +1,10 @@
+{
+  "Culture": "vi",
+  "Texts": {
+    "Err.Sample": "Nội dung mẫu",
+    "MerchantUser.RequiredField": "{0} chưa có dữ liệu, xin vui lòng nhập.",
+    "MerchantUser.StaffAssigned": "Staff {0} đã được thêm vào merchant của bạn.",
+    "MerchantUser.StaffAlreadyAssigned": "Staff {0} đã tồn tại.",
+    "MerchantUser.StaffNotExist": "Staff {0} chưa được tạo account."
+  }
+}

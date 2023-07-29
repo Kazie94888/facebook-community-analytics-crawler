@@ -1,0 +1,7 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@inject IHtmlLocalizer<AccountResource> L
+<form method="post" data-ajaxForm="false" action="~/Account/BackToImpersonator">
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn"><i class="fa fa-undo"></i> @L["BackToImpersonator"]</button>
+</form>

@@ -1,0 +1,26 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using LookOn.Localization
+@inject IHtmlLocalizer<LookOnResource> L
+@model LookOn.Web.Pages.Shared.CommunityIntegrationNotificationModel
+@{
+    Layout = null;
+}
+
+<script type="text/javascript" src="~/Pages/Shared/communityIntegrationNotificationModal.js"></script>
+
+<div id="community-integration-notification">
+    <abp-modal size="Large">
+        <abp-modal-body>
+            <h2>
+                @L["Dashboard.SocialCommunityRequired.Title"]
+            </h2>
+            <p>
+                @L["Dashboard.SocialCommunityRequired.Content"]
+            </p>
+        </abp-modal-body>
+        <div class="modal-footer">
+            <button id="communityIntegrationButton" type="button" class="btn btn-dark btn-hover-color-14" data-bs-dismiss="modal">@L["Dashboard.SocialCommunityRequired.RedirectButton"]</button>
+        </div>
+    </abp-modal>
+</div>

@@ -1,0 +1,114 @@
+//using map to compile scss to css
+//sass --watch veek.scss veek.css
+
+@use "sass:map";
+
+$current: 6;
+$scopes: (
+        1: "common",
+        2: "support",
+        3: "negative",
+        4: "warning",
+        5: "positive");
+$veek-colors: (
+        "common-color-1": #eaeaeb,
+        "common-color-2": #cbcccf,
+        "common-color-3": #a3a4a8,
+        "common-color-4": #787980,
+        "common-color-5": #4f5159,
+        "common-color-6": #282b35,
+        "common-color-7": #22252d,
+        "common-color-8": #1c1f26,
+        "common-color-9": #17191e,
+        "common-color-10": #121318,
+        "support-color-1": #f5f7f9,
+        "support-color-2": #e7ebf2,
+        "support-color-3": #d4dbe7,
+        "support-color-4": #c0cadc,
+        "support-color-5": #adbad1,
+        "support-color-6": #9babc7,
+        "support-color-7": #8491a9,
+        "support-color-8": #6e798d,
+        "support-color-9": #586171,
+        "support-color-10": #464d5a,
+        "negative-color-1": #fcedef,
+        "negative-color-2": #f7d3d8,
+        "negative-color-3": #f0afb8,
+        "negative-color-4": #ea8a98,
+        "negative-color-5": #e36779,
+        "negative-color-6": #dd465b,
+        "negative-color-7": #bc3c4d,
+        "negative-color-8": #9d3241,
+        "negative-color-9": #7e2834,
+        "negative-color-10": #631f29,
+        "warning-color-1": #fbf8ec,
+        "warning-color-2": #f6eed1,
+        "warning-color-3": #f0e1ac,
+        "warning-color-4": #e8d386,
+        "warning-color-5": #e1c662,
+        "warning-color-6": #dbb93f,
+        "warning-color-7": #ba9d36,
+        "warning-color-8": #9b832d,
+        "warning-color-9": #7d6924,
+        "warning-color-10": #63531c,
+        "positive-color-1": #f4faed,
+        "positive-color-2": #e5f3d3,
+        "positive-color-3": #d0e9b0,
+        "positive-color-4": #badf8b,
+        "positive-color-5": #a5d568,
+        "positive-color-6": #91cc47,
+        "positive-color-7": #7bad3c,
+        "positive-color-8": #679132,
+        "positive-color-9": #537428,
+        "positive-color-10": #415c20,
+        "lookon-primary-color-1": #4779fa,
+        "lookon-primary-color-2": #3834EF,
+        "white-color": #ffffff,
+        "black-color": #000000
+);
+$support-colors: #f5f7f9, #e7ebf2, #d4dbe7, #c0cadc, #adbad1, #9babc7, #8491a9, #6e798d, #586171, #464d5a;
+
+
+@mixin bg-color($bg-color) {
+  background-color: $bg-color;
+}
+@mixin f-color($bg-color) {
+  color: $bg-color;
+}
+@mixin b-color($bg-color) {
+  border-color: $bg-color;
+}
+
+@each $name, $color in $veek-colors {
+  .veek-#{$name}-background {
+    @include bg-color($color);
+  }
+  .veek-#{$name}-font {
+    @include f-color($color);
+  }
+  .veek-#{$name}-border {
+    @include b-color($color);
+  }
+}
+
+@mixin bg-color-current($current, $scope-index) {
+  background-color: map.get($veek-colors, "#{map.get($scopes, $scope-index)}-color-#{$current}");
+}
+@mixin f-color-current($current, $scope-index) {
+  color: map.get($veek-colors, "#{map.get($scopes, $scope-index)}-color-#{$current}");
+}
+@mixin b-color-current($current, $scope-index) {
+  border-color: map.get($veek-colors, "#{map.get($scopes, $scope-index)}-color-#{$current}");
+}
+
+@each $index, $scope in $scopes {
+  .veek-#{$scope}-current-background {
+  @include bg-color-current($current, $index);
+}
+  .veek-#{$scope}-current-font {
+    @include f-color-current($current, $index);
+  }
+  .veek-#{$scope}-current-border {
+    @include b-color-current($current, $index);
+  }
+}

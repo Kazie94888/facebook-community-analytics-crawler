@@ -1,0 +1,24 @@
+@page "/segment-insight-data"
+@using LookOn.Consts
+@using LookOn.Web.Pages.Shared
+@using Newtonsoft.Json
+@model LookOn.Web.Pages.SegmentInsights.Components.SegmentInsightsBody
+
+@{
+    Layout = null;
+}
+
+@if (Model.Page3Metric is not null)
+{
+    <script>
+                var genderTypesData = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.Page3Metric.Demographic.GenderMetrics))');
+                var relationShipTypesData = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.Page3Metric.Demographic.RelationshipMetrics))');
+            </script>
+    @await Html.PartialAsync("PartialViews/InsightCustomerDetailPartial", Model.Page3Metric.Demographic, ViewData)
+    @await Html.PartialAsync("PartialViews/InsightSocialPartial", Model.Page3Metric.CommunityInteraction, ViewData)
+    @await Html.PartialAsync("PartialViews/InsightCustomerByCityPartial", Model.Page3Metric.LocationByProvinces, ViewData)
+}
+else
+{
+    @await Html.PartialAsync("Shared/DashboardNoDataPartial", new DashboardNoDataModel() { PageName = DashboardPageConsts.Page3, SyncStatus = Model.Page3MerchantSyncStatus }, ViewData)
+}

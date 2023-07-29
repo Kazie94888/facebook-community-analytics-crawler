@@ -1,0 +1,104 @@
+﻿@page
+@model LookOn.Web.Pages.IndexModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@using LookOn.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Volo.Abp.Users
+@inject IHtmlLocalizer<LookOnResource> L
+@inject ICurrentUser CurrentUser
+@inject IThemeManager ThemeManager
+@{
+    if (CurrentUser.IsAuthenticated)
+    {
+        Layout = ThemeManager.CurrentTheme.GetLayout(StandardLayouts.Application);
+    }
+    else
+    {
+        Layout = ThemeManager.CurrentTheme.GetLayout(StandardLayouts.Empty);
+        //ViewBag.FluidLayout = true;
+    }
+}
+
+@section scripts {
+    <abp-script src="/Pages/Index.js"/>
+}
+
+@if (!CurrentUser.IsAuthenticated)
+{
+    <abp-row class="row-no-padding login-page">
+        <abp-card>
+            <abp-card-body>
+                <abp-row>
+                    <abp-column size-md="_7">
+                        <img src="images/logo-index/banner-left.png" alt="" class="img-fluid"/>
+                    </abp-column>
+                    <abp-column size-md="_5" class="login-page-right">
+                        <div class="logo text-center">
+                            <img src="images/logo-index/logo-dark.png" alt=""/>
+                        </div>
+                        <div class="slogan mt-3 text-center">
+                            <h4>Quản lý thông minh, grow up mỗi ngày</h4>
+                        </div>
+                        <div class="text-center mt-5">
+                            <img src="images/logo-index/chart-img.png" alt=""/>
+                        </div>
+                        <abp-row class="justify-content-md-center mt-3">
+                            <abp-column size-md="_8">
+                                <div class="d-grid gap-2">
+                                    <button onclick="window.location.href='/Account/Login';" class="btn LookOn-btn-primary btn-lg" type="button">
+                                        <span>Bắt đầu</span>
+                                        <span class="icon-circle icon-circle-primary float-end">
+                                            <i class="fa fa-arrow-right"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                            </abp-column>
+                        </abp-row>
+                        <abp-row class="justify-content-md-center mt-3">
+                            <abp-column size-md="_8">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-dark btn-lg" type="button">
+                                        <span>Tìm hiểu thêm</span>
+                                        <span class="icon-circle float-end">
+                                            <i class="fa fa-arrow-right"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                            </abp-column>
+                        </abp-row>
+                        <abp-row class="justify-content-md-center mt-3">
+                            <abp-column size-md="_8" class="text-center">
+                                <i class="fa fa-comment-alt"></i>
+                                <span class="d-inline-block">
+                                    <a href="#">Liên hệ</a>
+                                </span>
+                            </abp-column>
+                        </abp-row>
+                    </abp-column>
+                </abp-row>
+            </abp-card-body>
+        </abp-card>
+    </abp-row>
+}
+else
+{
+    @* <div class="container"> *@
+    @*     <div class="p-5 text-center"> *@
+    @*     *@
+    @*         @if (CurrentUser.IsAuthenticated && !CurrentUser.EmailVerified) *@
+    @*         { *@
+    @*             <Badge Color="Color.Warning" class="mb-4"> *@
+    @*                 <h5 class="m-1"> <i class="fas fa-email"></i> <strong>User has not NOT been verified by email yet!</strong></h5> *@
+    @*             </Badge> *@
+    @*         } *@
+    @* *@
+    @*         @if (CurrentUser.IsAuthenticated && CurrentUser.EmailVerified) *@
+    @*         { *@
+    @*             <Badge Color="Color.Success" class="mb-4"> *@
+    @*                 <h5 class="m-1"> <i class="fas fa-email"></i> <strong>User is successfully verified by email!</strong></h5> *@
+    @*             </Badge> *@
+    @*         } *@
+    @*     </div> *@
+    @* </div> *@
+}

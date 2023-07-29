@@ -1,0 +1,148 @@
+﻿@page "/merchant-connects"
+@using LookOn.Core.Extensions
+@using LookOn.Core.Shared.Enums
+@using LookOn.Enums
+@using Microsoft.AspNetCore.Mvc.Localization
+@using LookOn.Localization
+@using LookOn.Web.Menus
+@using Newtonsoft.Json
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Widgets
+@inject IHtmlLocalizer<LookOnResource> L
+@inject IWidgetManager WidgetManager
+@model LookOn.Web.Pages.MerchantIntegrationModel
+@inject IPageLayout PageLayout
+
+@{
+    PageLayout.Content.MenuItemName = LookOnMenus.MerchantConnects;
+}
+
+@{
+    var merchant = Model.Merchant ?? new();
+    var merchantSubscription = Model.MerchantSubscription ?? new();
+    var merchantStore = Model.MerchantStore ?? new();
+}
+
+@section scripts {
+    <abp-script src="/Pages/MerchantConnects/Index.js"/>
+    <script>
+        var isMaxSocialPage = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.IsMaxSocialPage))');
+        var merchantId = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.Merchant.Id))');
+    </script>
+}
+
+@section styles {
+    <abp-style src="/Pages/MerchantConnects/Index.css"/>
+}
+
+@if (merchant != null)
+{
+    <abp-row class="mb-3">
+        <abp-column class="row">
+            <abp-column size-md="_6">
+                <div class="text-left veek-support-current-font name-page-title">@L["MerchantConnects.Title"]</div>
+                <div class="mb-4 merchant-name-title">
+                    @Model.Merchant?.Name
+                </div>
+            </abp-column>
+        </abp-column>
+    </abp-row>
+
+    <abp-row>
+        <h2 class="font-weight-unset">Store</h2>
+        <abp-column size-lg="_4" class="max-height center-item">
+            <abp-card class="card-merchant-connect" style="height: 90%">
+                    <abp-card-body class="social-connecting-body-card">
+                        <abp-row>
+                            <abp-column class="social-connecting-title-col">
+                            <span class="display-bl social-connecting-card-title mb-2">@merchantStore.Name</span>
+                            <span class="display-bl">@L["MerchantConnections.EcomMainLabel"]</span>
+                        </abp-column>
+                            <abp-column class="social-connecting-image-col social-connecting-container-image">
+                                <div class="social-connecting-card-image">
+                                <img class="float-end" src="@Url.Content(L["Platform.Haravan.ImageUrl"].Value)" width="60px" alt="haravan logo"/>
+                            </div>
+                        </abp-column>
+
+                    </abp-row>
+                </abp-card-body>
+                <abp-card-footer class="mb-3 social-connecting-card-footer">
+                    <abp-row>
+                        <abp-column>
+                            <a href="~/insights" abp-button="Primary" title="@L["Menu:Page1"]" class="btn btn-dark btn-border-radius-20 display-inline-bl" id="storeChart">
+                                <i class="lo-chart-icon"></i>
+                            </a>
+                            <a class="btn btn-dark btn-border-radius-20 display-inline-bl mg-left-10" abp-button="Primary" title="@L["MerchantConnects.HaravanStorePage"]" id="storeSiteUrl">
+                                <i class="lo-share-icon"></i>
+                            </a>
+                        </abp-column>
+                    </abp-row>
+                </abp-card-footer>
+            </abp-card>
+        </abp-column>
+    </abp-row>
+    <abp-row>
+        <h2 class="font-weight-unset mb-4">@L["Dashboard.CommunityPages"]</h2>
+        <abp-column class="center-item-add-connect" size-lg="_4">
+            <abp-card class="card-transparent card-merchant-connect" style="height: 90%">
+                <div class="d-flex community-page-connect text-center align-items-center justify-content-center">
+                    <a href="#" id="btnConnectCommunity" abp-button="Primary" title="@L["Dashboard.ConnectCommunityPageButton"]" class="box btn btn-border-radius-20 btn-dark btn-lg">
+                        <i class="lo-connect-white-icon"></i> @L["Dashboard.ConnectCommunityPageButton"]
+                    </a>
+                </div>
+            </abp-card>
+        </abp-column>
+
+        @foreach (var community in merchant.Communities)
+        {
+            <abp-column class="center-item" size-lg="_4">
+                <abp-card class="card-merchant-connect" style="height: 90%">
+                    <abp-card-body class="social-connecting-body-card">
+                        <abp-row>
+                            <abp-column class="social-connecting-title-col">
+                                <a href="@(community.Url.Contains("//") ? community.Url : $"//{community.Url}")" target="_blank" class="link-no-under-line">
+                                    <h3 class="display-bl">
+                                        @community.SocialCommunityName
+                                    </h3>
+                                </a>
+                                <span class="view-page-details margin-0 opacity-75">@(merchant.Communities.IndexOf(community) == 0 ? L["MerchantConnections.MainCommunity"] : L["MerchantConnections.SubCommunity"])</span>
+                                <span class="margin-0 font-size">@community.Description</span>
+                            </abp-column>
+                            <abp-column class="social-connecting-image-col social-connecting-container-image">
+                                <div class="social-connecting-card-image">
+                                    <div class="text-center">
+                                        <span class="opacity-75 mb-2">@L[$"Enum:SocialCommunityVerificationStatus:{community.VerificationStatus.ToInt()}"]</span>
+                                    </div>
+                                    <div>
+                                        <img class="float-end" src="@Url.Content(L["Social.Facebook.ImageUrl"].Value)" width="60px" alt="facebook logo"/>
+                                    </div>
+                                </div>
+                            </abp-column>
+                        </abp-row>
+                    </abp-card-body>
+                    <abp-card-footer class="mb-3 social-connecting-card-footer">
+                        <abp-row>
+                            <abp-column size-md="_12">
+                                <a href="~/insights" title="@L["Menu:Page2"]" abp-button="Primary" class="btn btn-dark btn-border-radius-20 display-inline-bl mb-1" id="communityChart">
+                                    <i class="lo-chart-icon"></i>
+                                </a>
+
+                                <a href="@(community.Url.Contains("//") ? community.Url : $"//{community.Url}")" abp-button="Primary" title="@L["MerchantConnects.CommunityPageName"]" target="_blank" class="btn btn-dark btn-border-radius-20 display-inline-bl mg-left-10 mb-1">
+                                    <i class="lo-share-icon"></i>
+                                </a>
+
+                                @if (community.VerificationStatus != SocialCommunityVerificationStatus.Approved)
+                                {
+                                    <btn abp-button="Primary" title="@L["MerchantConnects.CommunityPageName"]" class="btn btn-border-radius-20 display-inline-bl mg-left-10 btn-delete-community" value="@community.SocialCommunityName">
+                                        <i class="lo-delete-icon"></i>
+                                    </btn>
+                                }
+                            </abp-column>
+                        </abp-row>
+                    </abp-card-footer>
+                </abp-card>
+            </abp-column>
+        }
+
+    </abp-row>
+}

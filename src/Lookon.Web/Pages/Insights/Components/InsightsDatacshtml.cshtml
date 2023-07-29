@@ -1,0 +1,1628 @@
+@page "/insight-data"
+@inject IHtmlLocalizer<LookOnResource> L
+@using System.Globalization
+@using LookOn.Core.Consts
+@using LookOn.Core.Extensions
+@using LookOn.Enums
+@using LookOn.Localization
+@using LookOn.Web.Pages.Shared
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Newtonsoft.Json
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ProgressBar
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Table
+@using LookOn.Core.Helpers
+@model LookOn.Web.Pages.Insights.Components.InsightsData
+
+@{
+    Layout = null;
+}
+
+@section scripts
+{
+    <abp-script src="/Pages/Insights/Components/insight.js"/>
+}
+
+@{
+    if (Model.MetricItem.EcomRevenueSummary is not null)
+    {
+        <script>
+            var revenueByDates = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.MetricItem.EcomRevenueSummary.RevenueByDates.Where(x => x.DateTime.Date != DateTime.Now.Date).OrderBy(_ => _.DateTime)))');
+            loadRevenueBarChart();
+        </script>
+    }
+    if (Model.MetricItem.SocialDemographic is not null)
+    {
+        <script>
+            var genderTypesData = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.MetricItem.SocialDemographic.GenderMetrics))');
+            var relationShipTypesData = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.MetricItem.SocialDemographic.RelationshipMetrics))');
+            loadSocialPieChart();
+        </script>
+    }
+}
+
+@* @if (Model.DataType == InsightDataType.Ecom) *@
+@* { *@
+@*     @await Html.PartialAsync("PartialViews/EcomPartial", Model.MetricItem, ViewData) *@
+@* }else if (Model.DataType == InsightDataType.Social) *@
+@* { *@
+@*     @await Html.PartialAsync("PartialViews/SocialPartial", Model.MetricItem, ViewData) *@
+@* } *@
+@* else *@
+@* { *@
+@*     @await Html.PartialAsync("PartialViews/EcomPartial", Model.MetricItem, ViewData) *@
+@*     @await Html.PartialAsync("PartialViews/SocialPartial", Model.MetricItem, ViewData) *@
+@* } *@
+
+@* EcomSummary *@
+@if (Model.MetricItem.EcomSummary is not null && Model.DataType.ToInt().IsInsightDataType(InsightDataHelper.EcomDataNums))
+{
+    <abp-row>
+        <abp-column class="ecom-summary-card-col">
+            <abp-card class="@Model.MetricItem.EcomSummary.OrderGrowthPercent.GetColorBorderClass(Model.MetricItem.EcomSummary.IsOrderCountPositive) height-90-pc">
+                <abp-card-body class="ecom-summary-card">
+                    <abp-row>
+                        <abp-column size-md="_12" class="ecom-summary-card-header mb-3">
+                            <abp-column size="_11">
+                                <span class="veek-support-current-font ">@L["Page1.Overview.TotalOrders"]</span>
+                            </abp-column>
+                            <abp-column size="_1">
+                                <button type="button" class="btn display-inline-bl float-end shadow-none info-tooltip-margin" data-toggle="tooltip" data-popper-placement="left" title="@L["Page1.Overview.TotalOrders.Hint"].Value">
+                                    <span class="lo-info-circle-icon"></span>
+                                </button>
+                            </abp-column>
+                        </abp-column>
+                        <abp-column>
+                            <span class="small-card-value">@Model.MetricItem.EcomSummary.OrderCount.FormatNumber()</span>
+                            <span class="@Model.MetricItem.EcomSummary.OrderGrowthPercent.GetColorClass(@Model.MetricItem.EcomSummary.IsOrderCountPositive) display-inline-bl">
+                                @if (@Model.MetricItem.EcomSummary.OrderGrowthPercent is not 0)
+                                {
+                                    <span class="@Model.MetricItem.EcomSummary.OrderGrowthPercent.GetArrowClass(@Model.MetricItem.EcomSummary.IsOrderCountPositive)"></span>
+                                }
+                                @Model.MetricItem.EcomSummary.OrderGrowthPercent.FormatNumber().ToPositivePercent()
+                            </span>
+                        </abp-column>
+                    </abp-row>
+                </abp-card-body>
+            </abp-card>
+        </abp-column>
+        <abp-column class="ecom-summary-card-col">
+            <abp-card class="@Model.MetricItem.EcomSummary.PurchasedCustomerGrowthPercent.GetColorBorderClass(Model.MetricItem.EcomSummary.IsPurchasedCustomerCountPositive) height-90-pc">
+                <abp-card-body class="ecom-summary-card">
+                    <abp-row>
+                        <abp-column size-md="_12" class="ecom-summary-card-header mb-3">
+                            <abp-column size="_11">
+                                <span class="veek-support-current-font">@L["Page1.Overview.PurchasedUsers"]</span>
+                            </abp-column>
+                            <abp-column size="_1">
+                                <button type="button" class="btn display-inline-bl float-end shadow-none info-tooltip-margin" data-toggle="tooltip" data-popper-placement="left" title="@L["Page1.Overview.PurchasedUsers.Hint"].Value">
+                                    <span class="lo-info-circle-icon"></span>
+                                </button>
+                            </abp-column>
+                        </abp-column>
+                        <abp-column>
+                            <span class="small-card-value">@Model.MetricItem.EcomSummary.PurchasedCustomerCount.FormatNumber()</span>
+                            <span class="@Model.MetricItem.EcomSummary.PurchasedCustomerGrowthPercent.GetColorClass(@Model.MetricItem.EcomSummary.IsPurchasedCustomerCountPositive) display-inline-bl">
+                                @if (@Model.MetricItem.EcomSummary.PurchasedCustomerGrowthPercent is not 0)
+                                {
+                                    <span class="@Model.MetricItem.EcomSummary.PurchasedCustomerGrowthPercent.GetArrowClass(@Model.MetricItem.EcomSummary.IsPurchasedCustomerCountPositive)"></span>
+                                }
+                                @Model.MetricItem.EcomSummary.PurchasedCustomerGrowthPercent.FormatNumber().ToPositivePercent()
+                            </span>
+                        </abp-column>
+                    </abp-row>
+                </abp-card-body>
+            </abp-card>
+        </abp-column>
+        <abp-column class="ecom-summary-card-col">
+            <abp-card class="@Model.MetricItem.EcomSummary.AOVGrowthPercent.GetColorBorderClass(Model.MetricItem.EcomSummary.IsAOVPositive) height-90-pc">
+                <abp-card-body class="ecom-summary-card">
+                    <abp-row>
+                        <abp-column size-md="_12" class="ecom-summary-card-header mb-3">
+                            <abp-column size="_11">
+                                <span class="veek-support-current-font ">@L["Page1.Overview.AOV"]</span>
+                            </abp-column>
+                            <abp-column size="_1">
+                                <button type="button" class="btn display-inline-bl float-end shadow-none info-tooltip-margin" data-toggle="tooltip" data-popper-placement="left" title="@L["Page1.Overview.AOV.Hint"].Value">
+                                    <span class="lo-info-circle-icon"></span>
+                                </button>
+                            </abp-column>
+                        </abp-column>
+                        <abp-column>
+                            <span class="small-card-value">@Model.MetricItem.EcomSummary.AOV.ToCommaStyle("0")</span>
+                            <span class="@Model.MetricItem.EcomSummary.AOVGrowthPercent.GetColorClass(@Model.MetricItem.EcomSummary.IsAOVPositive) display-inline-bl">
+                                @if (@Model.MetricItem.EcomSummary.PurchasedCustomerGrowthPercent is not 0)
+                                {
+                                    <span class="@Model.MetricItem.EcomSummary.AOVGrowthPercent.GetArrowClass(@Model.MetricItem.EcomSummary.IsAOVPositive)"></span>
+                                }
+                                @Model.MetricItem.EcomSummary.AOVGrowthPercent.FormatNumber().ToPositivePercent()
+                            </span>
+                        </abp-column>
+                    </abp-row>
+                </abp-card-body>
+            </abp-card>
+        </abp-column>
+        <abp-column class="ecom-summary-card-col">
+            <abp-card class="@Model.MetricItem.EcomSummary.CLVGrowthPercent.GetColorBorderClass(@Model.MetricItem.EcomSummary.IsCLVPositive) height-90-pc">
+                <abp-card-body class="ecom-summary-card">
+                    <abp-row>
+                        <abp-column size-md="_12" class="ecom-summary-card-header mb-3">
+                            <abp-column size="_11">
+                                <span class="veek-support-current-font">@L["Page1.Overview.CLV"]</span>
+                            </abp-column>
+                            <abp-column size="_1">
+                                <button type="button" class="btn display-inline-bl float-end shadow-none info-tooltip-margin" data-toggle="tooltip" data-popper-placement="left" title="@L["Page1.Overview.CLV.Hint"].Value">
+                                    <span class="lo-info-circle-icon"></span>
+                                </button>
+                            </abp-column>
+                        </abp-column>
+                        <abp-column>
+                            <span class="small-card-value">@Model.MetricItem.EcomSummary.CLV.ToCommaStyle("0")</span>
+                            <span class="@Model.MetricItem.EcomSummary.CLVGrowthPercent.GetColorClass(@Model.MetricItem.EcomSummary.IsCLVPositive) display-inline-bl">
+                                @if (@Model.MetricItem.EcomSummary.CLVGrowthPercent is not 0)
+                                {
+                                    <span class="@Model.MetricItem.EcomSummary.CLVGrowthPercent.GetArrowClass(@Model.MetricItem.EcomSummary.IsCLVPositive)"></span>
+                                }
+                                @Model.MetricItem.EcomSummary.CLVGrowthPercent.FormatNumber().ToPositivePercent()
+                            </span>
+                        </abp-column>
+                    </abp-row>
+                </abp-card-body>
+            </abp-card>
+        </abp-column>
+    </abp-row>
+
+    <abp-row>
+        <abp-column class="ecom-summary-card-col">
+            <abp-card class="@Model.MetricItem.EcomSummary.ReturnedOrderGrowthRatePercent.GetColorBorderClass(@Model.MetricItem.EcomSummary.IsReturnedOrderRatePositive) height-90-pc">
+                <abp-card-body class="ecom-summary-card">
+                    <abp-row>
+                        <abp-column size-md="_12" class="ecom-summary-card-header mb-3">
+                            <abp-column size="_11">
+                                <span class="veek-support-current-font" style="min-height: 60px">@L["Page1.Overview.ReturnedOrderPercentage"]</span>
+                            </abp-column>
+                            <abp-column size="_1">
+                                <button type="button" class="btn display-inline-bl float-end shadow-none info-tooltip-margin" data-toggle="tooltip" data-popper-placement="left" title="@L["Page1.Overview.ReturnedOrderPercentage.Hint"].Value">
+                                    <span class="lo-info-circle-icon"></span>
+                                </button>
+                            </abp-column>
+
+
+                        </abp-column>
+                        <abp-column>
+                            <span class="small-card-value">@Model.MetricItem.EcomSummary.ReturnedOrderPercent.ToPositivePercent()</span>
+                            <span class="@Model.MetricItem.EcomSummary.ReturnedOrderGrowthRatePercent.GetColorClass(@Model.MetricItem.EcomSummary.IsRetentionRatePositive) display-inline-bl">
+                                @if (@Model.MetricItem.EcomSummary.ReturnedOrderGrowthRatePercent is not 0)
+                                {
+                                    <span class="@Model.MetricItem.EcomSummary.ReturnedOrderGrowthRatePercent.GetArrowClass(@Model.MetricItem.EcomSummary.IsRetentionRatePositive)"></span>
+                                }
+                                @Model.MetricItem.EcomSummary.ReturnedOrderGrowthRatePercent.FormatNumber().ToPositivePercent()
+                            </span>
+                        </abp-column>
+                    </abp-row>
+                </abp-card-body>
+            </abp-card>
+
+        </abp-column>
+        <abp-column class="ecom-summary-card-col">
+            <abp-card class="@Model.MetricItem.EcomSummary.CancelledOrderGrowthPercent.GetColorBorderClass(@Model.MetricItem.EcomSummary.IsCancelledOrderRatePositive) height-90-pc">
+                <abp-card-body class="ecom-summary-card">
+                    <abp-row>
+                        <abp-column size-md="_12" class="ecom-summary-card-header mb-3">
+                            <abp-column size="_11">
+                                <span class="veek-support-current-font" style="min-height: 60px">@L["Page1.Overview.CancelledOrders"]</span>
+                            </abp-column>
+                            <abp-column size="_1">
+                                <button type="button" class="btn display-inline-bl float-end shadow-none info-tooltip-margin" data-toggle="tooltip" data-popper-placement="left" title="@L["Page1.Overview.CancelledOrders.Hint"].Value">
+                                    <span class="lo-info-circle-icon"></span>
+                                </button>
+                            </abp-column>
+                        </abp-column>
+                        <abp-column>
+                            <span class="small-card-value">@Model.MetricItem.EcomSummary.CancelledOrderPercent.ToPositivePercent()</span>
+                            <span class="@Model.MetricItem.EcomSummary.CancelledOrderGrowthPercent.GetColorClass(@Model.MetricItem.EcomSummary.IsCancelledOrderRatePositive) display-inline-bl">
+                                @if (@Model.MetricItem.EcomSummary.CancelledOrderGrowthPercent is not 0)
+                                {
+                                    <span class="@Model.MetricItem.EcomSummary.CancelledOrderGrowthPercent.GetArrowClass(@Model.MetricItem.EcomSummary.IsCancelledOrderRatePositive)"></span>
+                                }
+                                @Model.MetricItem.EcomSummary.CancelledOrderGrowthPercent.FormatNumber().ToPositivePercent()
+                            </span>
+                        </abp-column>
+                    </abp-row>
+                </abp-card-body>
+            </abp-card>
+
+        </abp-column>
+        <abp-column class="ecom-summary-card-col">
+            <abp-card class="@Model.MetricItem.EcomSummary.RetentionGrowthPercent.GetColorBorderClass(@Model.MetricItem.EcomSummary.IsRetentionRatePositive) height-90-pc">
+                <abp-card-body class="ecom-summary-card">
+                    <abp-row>
+                        <abp-column size-md="_12" class="ecom-summary-card-header mb-3">
+                            <abp-column size="_11">
+                                <span class="veek-support-current-font" style="min-height: 60px">@L["Page1.Overview.RetentionRate"]</span>
+                            </abp-column>
+                            <abp-column size="_1">
+                                <button type="button" class="btn display-inline-bl float-end shadow-none info-tooltip-margin" data-toggle="tooltip" data-popper-placement="left" title="@L["Page1.Overview.RetentionRate.Hint"].Value">
+                                    <span class="lo-info-circle-icon"></span>
+                                </button>
+                            </abp-column>
+
+
+                        </abp-column>
+                        <abp-column>
+                            <span class="small-card-value">@Model.MetricItem.EcomSummary.RetentionPercent.ToPositivePercent()</span>
+                            <span class="@Model.MetricItem.EcomSummary.RetentionGrowthPercent.GetColorClass(@Model.MetricItem.EcomSummary.IsRetentionRatePositive) display-inline-bl">
+                                @if (@Model.MetricItem.EcomSummary.RetentionGrowthPercent is not 0)
+                                {
+                                    <span class="@Model.MetricItem.EcomSummary.RetentionGrowthPercent.GetArrowClass(@Model.MetricItem.EcomSummary.IsRetentionRatePositive)"></span>
+                                }
+                                @Model.MetricItem.EcomSummary.RetentionGrowthPercent.FormatNumber().ToPositivePercent()
+                            </span>
+                        </abp-column>
+                    </abp-row>
+                </abp-card-body>
+            </abp-card>
+
+        </abp-column>
+        <abp-column class="ecom-summary-card-col">
+            <abp-card class="@Model.MetricItem.EcomSummary.AvgSKUGrowthPercent.GetColorBorderClass(@Model.MetricItem.EcomSummary.IsAvgProductPositive) height-90-pc">
+                <abp-card-body class="ecom-summary-card">
+                    <abp-row>
+                        <abp-column size-md="_12" class="ecom-summary-card-header mb-3">
+                            <abp-column size="_11">
+                                <span class="veek-support-current-font" style="min-height: 60px">@L["Page1.Overview.AvgProductCountPerUser"]</span>
+                            </abp-column>
+                            <abp-column size="_1">
+                                <button type="button" class="btn display-inline-bl float-end shadow-none info-tooltip-margin" data-toggle="tooltip" data-popper-placement="left" title="@L["Page1.Overview.AvgProductCountPerUser.Hint"].Value">
+                                    <span class="lo-info-circle-icon"></span>
+                                </button>
+                            </abp-column>
+                        </abp-column>
+                        <abp-column>
+                            <span class="small-card-value">@Math.Round(Model.MetricItem.EcomSummary.AvgProductCount, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.CreateSpecificCulture("en-US"))</span>
+                            <span class="@Model.MetricItem.EcomSummary.AvgSKUGrowthPercent.GetColorClass(@Model.MetricItem.EcomSummary.IsAvgProductPositive) display-inline-bl">
+                                @if (@Model.MetricItem.EcomSummary.AvgSKUGrowthPercent is not 0)
+                                {
+                                    <span class="@Model.MetricItem.EcomSummary.AvgSKUGrowthPercent.GetArrowClass(@Model.MetricItem.EcomSummary.IsAvgProductPositive)"></span>
+                                }
+                                @Model.MetricItem.EcomSummary.AvgSKUGrowthPercent.FormatNumber().ToPositivePercent()
+                            </span>
+                        </abp-column>
+                    </abp-row>
+                </abp-card-body>
+            </abp-card>
+        </abp-column>
+    </abp-row>
+}
+
+@* SocialInsight *@
+@if (Model.MetricItem.SocialInsight is not null && !Model.DataType.ToInt().IsInsightDataType(new[] { 2 }))
+{
+    <abp-row>
+        @if (Model.DataType.ToInt().IsInsightDataType(new[] { 3 }))
+        {
+            <abp-column class="ecom-summary-card-col">
+                <abp-card class="card-border-top-color-green height-90-pc">
+                    <abp-card-body>
+                        <abp-row>
+                            <abp-column>
+                                @if (Model.MetricItem.SocialInsight.NonPurchasedUserCount != 0)
+                                {
+                                    <span class="text-black small-card-value">@Model.MetricItem.SocialInsight.NonPurchasedUserPercent.ToPositivePercent()</span>
+                                }
+                                else
+                                {
+                                    <div style="height: 60px;margin-bottom: 1rem;display: grid;align-content: center;">
+                                        @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, HasImage = false }, ViewData)
+                                    </div>
+                                }
+                                <div class="mb-3">
+                                    <abp-progress-bar value="@Model.MetricItem.SocialInsight.NonPurchasedUserPercent.ToDouble()" class="LookOn-progress-bar-color-0"/>
+                                </div>
+                            </abp-column>
+                            <abp-column size-md="_12" style="min-height: 40px">
+                                <span class="veek-support-current-font">@L["Page2.Overview.NonPurchasedUser"]</span>
+                            </abp-column>
+                        </abp-row>
+                    </abp-card-body>
+                </abp-card>
+            </abp-column>
+        }
+
+        @if (Model.DataType.ToInt().IsInsightDataType(new[] { 1 }))
+        {
+            <abp-column class="ecom-summary-card-col">
+                <abp-card class="card-border-top-color-green height-90-pc">
+                    <abp-card-body>
+                        <abp-row>
+                            <abp-column>
+                                @if (Model.MetricItem.SocialInsight.NonLikePageUserCount != 0)
+                                {
+                                    <span class="text-black small-card-value">@Model.MetricItem.SocialInsight.NonLikePageUserPercent.ToPositivePercent()</span>
+                                }
+                                else
+                                {
+                                    <div style="height: 60px;margin-bottom: 1rem;display: grid;align-content: center;">
+                                        @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, HasImage = false }, ViewData)
+                                    </div>
+                                }
+                                <div class="mb-3">
+                                    <abp-progress-bar value="@Model.MetricItem.SocialInsight.NonLikePageUserPercent.ToDouble()" class="LookOn-progress-bar-color-0"/>
+                                </div>
+                            </abp-column>
+                            <abp-column size-md="_12" style="min-height: 40px">
+                                <span class="veek-support-current-font">@L["Page2.Overview.NonLikePageUser"]</span>
+                            </abp-column>
+                        </abp-row>
+                    </abp-card-body>
+                </abp-card>
+            </abp-column>
+        }
+
+        @if (Model.DataType.ToInt().IsInsightDataType(new[] { 3, 4 }))
+        {
+            <abp-column class="ecom-summary-card-col">
+                <abp-card class="card-border-top-color-green height-90-pc">
+                    <abp-card-body>
+                        <abp-row>
+                            <abp-column>
+                                @if (Model.MetricItem.SocialInsight.TopLikedPageName.IsNotNullOrSpace())
+                                {
+                                    <span class="text-black small-card-value">@Model.MetricItem.SocialInsight.TopLikedPagePercent.ToPositivePercent()</span>
+                                }
+                                else
+                                {
+                                    <div style="height: 60px;margin-bottom: 1rem;display: grid;align-content: center;">
+                                        @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, HasImage = false }, ViewData)
+                                    </div>
+                                }
+                                <div class="mb-3">
+                                    <abp-progress-bar value="@Model.MetricItem.SocialInsight.TopLikedPagePercent.ToDouble()" class="LookOn-progress-bar-color-0"/>
+                                </div>
+                            </abp-column>
+                            <abp-column size-md="_12" style="min-height: 40px">
+                                <span class="veek-support-current-font">@(Model.MetricItem.SocialInsight.TopLikedPageName.IsNullOrSpace() ? L["Page2.Overview.TopSocialCommunityByKOC"] : L["Page2.Overview.TopLikedPage", Model.MetricItem.SocialInsight.TopLikedPageName])</span>
+                            </abp-column>
+                        </abp-row>
+                    </abp-card-body>
+                </abp-card>
+            </abp-column>
+        }
+        @if (Model.DataType.ToInt().IsInsightDataType(new[] { 5 }))
+        {
+            <abp-column class="ecom-summary-card-col">
+                <abp-card class="card-border-top-color-green height-90-pc">
+                    <abp-card-body>
+                        <abp-row>
+                            <abp-column>
+                                @if (Model.MetricItem.SocialInsight.MostPopularSegmentName.IsNotNullOrSpace())
+                                {
+                                    <span class="text-black small-card-value">@Model.MetricItem.SocialInsight.MostPopularSegmentPercent.ToPositivePercent()</span>
+                                }
+                                else
+                                {
+                                    <div style="height: 60px;margin-bottom: 1rem;display: grid;align-content: center;">
+                                        @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, HasImage = false }, ViewData)
+                                    </div>
+                                }
+
+                                <div class="mb-3">
+                                    <abp-progress-bar value="@Model.MetricItem.SocialInsight.MostPopularSegmentPercent.ToDouble()" class="LookOn-progress-bar-color-0"/>
+                                </div>
+                            </abp-column>
+
+                            <abp-column size-md="_12" style="min-height: 40px">
+                                <span class="veek-support-current-font">@(Model.MetricItem.SocialInsight.MostPopularSegmentName.IsNullOrSpace() ? L["Page2.Overview.MostPopularSegmentTitle"] : L["Page2.Overview.MostPopularSegment", Model.MetricItem.SocialInsight.MostPopularSegmentName])</span>
+                            </abp-column>
+                        </abp-row>
+                    </abp-card-body>
+                </abp-card>
+            </abp-column>
+        }
+
+        @if (Model.DataType.ToInt().IsInsightDataType(new[] { 5 }))
+        {
+            <abp-column class="ecom-summary-card-col">
+                <abp-card class="card-border-top-color-green height-90-pc">
+                    <abp-card-body>
+                        <abp-row>
+                            <abp-column>
+                                @if (Model.MetricItem.SocialInsight.LessInterestSegmentName.IsNotNullOrSpace())
+                                {
+                                    <span class="text-black small-card-value">@Model.MetricItem.SocialInsight.LessInterestSegmentPercent.ToPositivePercent()</span>
+                                }
+                                else
+                                {
+                                    <div style="height: 60px;margin-bottom: 1rem;display: grid;align-content: center;">
+                                        @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, HasImage = false }, ViewData)
+
+                                    </div>
+                                }
+                                <div class="mb-3">
+                                    <abp-progress-bar value="@Model.MetricItem.SocialInsight.LessInterestSegmentPercent.ToDouble()" class="LookOn-progress-bar-color-0"/>
+                                </div>
+                            </abp-column>
+                            <abp-column size-md="_12" style="min-height: 40px">
+                                <span class="veek-support-current-font">@(Model.MetricItem.SocialInsight.NonLikePageUserCount is 0 ? L["Page2.Overview.LessInterestSegmentTitle"] : L["Page2.Overview.NonLikePageUser"])</span>
+                            </abp-column>
+                        </abp-row>
+                    </abp-card-body>
+                </abp-card>
+            </abp-column>
+        }
+    </abp-row>
+}
+
+@* EcomRevenueSummary *@
+@if (Model.MetricItem.EcomRevenueSummary is not null && Model.DataType.ToInt().IsInsightDataType(InsightDataHelper.EcomDataNums))
+{
+    <abp-card>
+        <abp-card-header class="component-card-header">
+            <abp-row class="mb-2">
+                <div class="note-icon-header">
+                </div>
+            </abp-row>
+        </abp-card-header>
+        <abp-card-body class="component-card-body">
+            <abp-row>
+                <abp-row class="mb-custom-2">
+                    <abp-column size-md="_11" size-sm="_9" class="component-card-body-title">
+                        <div>@L[$"Page1.DashboardTotalRevenue.{ViewData["TimeTitle"]}Title"]</div>
+                    </abp-column>
+                    <abp-column size-md="_1" size-sm="_3">
+                        <button type="button" class="btn question-tooltip-margin" data-toggle="tooltip" data-popper-placement="left" title="@L[$"Page1.DashboardTotalRevenue.{ViewData["TimeTitle"]}Title"].Value">
+                            <span class="lo-help-icon"></span>
+                        </button>
+                    </abp-column>
+                </abp-row>
+
+                @if (Model.MetricItem.EcomRevenueSummary.RevenueByDates.IsNotNullOrEmpty() && Model.MetricItem.EcomRevenueSummary.Revenue != 0)
+                {
+                    <abp-column size-xl="_9" size-lg="_8" size-md="_12">
+                        <div id="barChartContainer"></div>
+                    </abp-column>
+                    <abp-column class="revenue-summary-column" size-xl="_3" size-lg="_4" size-md="_12">
+                        <abp-card class="justify-content-center box-chart-center">
+                            <abp-card-body>
+                                <abp-table border-style="Borderless" striped-rows="false" class="table-box-center">
+                                    <tbody>
+                                    @* <tr> *@
+                                    @*     <td style="border-top: none !important"> *@
+                                    @*         @if (Model.MetricItem.EcomRevenueSummary.RevenueToday != 0) *@
+                                    @*         { *@
+                                    @*             <div class="display-bl text-center"> *@
+                                    @*                 <h1>@Model.MetricItem.EcomRevenueSummary.RevenueToday.ToCommaStyle().ToVND()</h1> *@
+                                    @*             </div> *@
+                                    @*             <div class="display-bl text-center"> *@
+                                    @*                 <b class="display-bl text-center @Model.MetricItem.EcomRevenueSummary.RevenueToday.GetColorClass()"> *@
+                                    @*                      <span class="@Model.MetricItem.EcomRevenueSummary.RevenueTodayGrowthPercent.GetArrowClass()"></span> @Model.MetricItem.EcomRevenueSummary.RevenueTodayGrowthPercent.FormatNumber().ToPositivePercent() *@
+                                    @*                 </b> *@
+                                    @*             </div> *@
+                                    @*             <div class="text-center veek-support-current-font"> *@
+                                    @*                 @L["Page1.DashboardTotalRevenue.RevenueToday"] *@
+                                    @*             </div> *@
+                                    @*         } *@
+                                    @*     </td> *@
+                                    @* </tr> *@
+                                    <tr>
+                                        <td>
+                                            <div class="display-bl text-center">
+                                                <h1>@Model.MetricItem.EcomRevenueSummary.Revenue.ToCommaStyle().ToVND()</h1>
+                                            </div>
+                                            <div class="display-bl text-center">
+                                                <b class="display-bl text-center @Model.MetricItem.EcomRevenueSummary.RevenueGrowthPercent.GetColorClass()">
+                                                    <span class="@Model.MetricItem.EcomRevenueSummary.RevenueGrowthPercent.GetArrowClass()"></span> @Model.MetricItem.EcomRevenueSummary.RevenueGrowthPercent.FormatNumber().ToPositivePercent()
+                                                </b>
+                                            </div>
+                                            <div class="text-center veek-support-current-font mt-4">
+                                                @L[$"Page1.DashboardTotalRevenue.Revenue{ViewData["TimeTitle"]}"]
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </abp-table>
+                            </abp-card-body>
+                        </abp-card>
+                    </abp-column>
+                }
+                else
+                {
+                    @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = true }, ViewData)
+                }
+            </abp-row>
+        </abp-card-body>
+    </abp-card>
+}
+
+<abp-row>
+    <abp-column size-xl="_6" size-md="_12">
+        @* EcomRevenueByProducts *@
+        @if (Model.MetricItem.EcomRevenueByProducts is not null && Model.DataType.ToInt().IsInsightDataType(InsightDataHelper.EcomDataNums))
+        {
+            <abp-card class="height-95-pc">
+                <abp-card-header class="component-card-header">
+                    <abp-row class="mb-2">
+                        <div class="note-icon-header">
+                        </div>
+                    </abp-row>
+                </abp-card-header>
+                <abp-card-body class="component-card-body">
+                    <abp-row>
+                        <abp-row class="mb-custom-2">
+                            <abp-column size-md="_11" size-sm="_10" class="component-card-body-title">
+                                <div>@L["Page1.DashboardTopProduct.Title"]</div>
+                            </abp-column>
+                            <abp-column size-md="_1" size-sm="_2">
+                                <button type="button" class="btn question-tooltip-margin" data-toggle="tooltip" data-popper-placement="left" title="@L["Page1.DashboardTopProduct.Hint"].Value">
+                                    <span class="lo-help-icon"></span>
+                                </button>
+                            </abp-column>
+                        </abp-row>
+                        <abp-column size-md="_12" size-sm="_12">
+                            <abp-table border-style="Borderless" striped-rows="false" class="table-top-border-none table-layout-fixed table-sm">
+                                <tbody>
+                                @if (Model.MetricItem.EcomRevenueByProducts.IsNotNullOrEmpty())
+                                {
+                                    @foreach (var item in Model.MetricItem.EcomRevenueByProducts)
+                                    {
+                                        <tr>
+                                            <td class="text-ellipsis">
+                                                <strong>#@(Model.MetricItem.EcomRevenueByProducts.IndexOf(item) + 1)</strong>&ensp;
+                                                <span class="top-product-name cursor-pointer" data-toggle="tooltip" title="@item.ProductName">
+                                                    @item.ProductName
+                                                </span>
+                                            </td>
+                                            <td class="text-align-right" style="width: 75px">
+                                                @item.Percent.ToPositivePercent()
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <abp-progress-bar value="@item.Percent.ToDouble()" class="LookOn-progress-bar-color-0"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="2">
+                                            @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = true }, ViewData)
+                                        </td>
+                                    </tr>
+                                }
+
+                                </tbody>
+                            </abp-table>
+                        </abp-column>
+                    </abp-row>
+                </abp-card-body>
+            </abp-card>
+        }
+    </abp-column>
+
+    <abp-column size-xl="_6" size-md="_12">
+        @* EcomRevenueByLocation *@
+        @if (Model.MetricItem.EcomRevenueByLocations is not null && Model.DataType.ToInt().IsInsightDataType(InsightDataHelper.EcomDataNums))
+        {
+            <abp-card class="height-95-pc">
+                <abp-card-header class="component-card-header">
+                    <abp-row class="mb-2">
+                        <div class="note-icon-header">
+                        </div>
+                    </abp-row>
+                </abp-card-header>
+                <abp-card-body class="component-card-body">
+                    <abp-row>
+                        <abp-row class="mb-custom-2">
+                            <abp-column size-md="_11" size-sm="_10" class="component-card-body-title">
+                                <div>@L["Page1.DashboardTotalRevenueByLocation.Title"]</div>
+                            </abp-column>
+                            <abp-column size-md="_1" size-sm="_2">
+                                <button type="button" class="btn question-tooltip-margin" data-toggle="tooltip" data-popper-placement="left" title="@L["Page1.DashboardTotalRevenueByLocation.Hint"].Value">
+                                    <span class="lo-help-icon"></span>
+                                </button>
+                            </abp-column>
+                        </abp-row>
+                        <abp-column size-md="_12" size-sm="_12">
+                            <abp-table border-style="Borderless" striped-rows="false" class="table-top-border-none table-layout-fixed table-sm">
+                                <tbody>
+                                @if (Model.MetricItem.EcomRevenueByLocations.IsNotNullOrEmpty())
+                                {
+                                    @foreach (var item in Model.MetricItem.EcomRevenueByLocations)
+                                    {
+                                        <tr>
+                                            <td class="text-ellipsis">
+                                                <strong>#@(Model.MetricItem.EcomRevenueByLocations.IndexOf(item) + 1)</strong>&ensp;
+                                                <span data-toggle="tooltip" title="@item.Name">
+                                                    @item.Name
+                                                </span>
+                                            </td>
+                                            <td class="text-align-right">
+                                                @item.Percent.ToPositivePercent()
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <abp-progress-bar value="@item.Percent.ToDouble()" class="LookOn-progress-bar-color-0"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="2">
+                                            @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = true }, ViewData)
+                                        </td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </abp-table>
+                        </abp-column>
+                    </abp-row>
+                </abp-card-body>
+            </abp-card>
+        }
+    </abp-column>
+</abp-row>
+@* SocialCustomerDetail *@
+@if (Model.MetricItem.SocialDemographic is not null && Model.DataType.ToInt().IsInsightDataType(InsightDataHelper.SocialDataNums))
+{
+    <abp-card>
+        <abp-card-header class="component-card-header">
+            <abp-row class="mb-2">
+                <div class="note-icon-header">
+                </div>
+            </abp-row>
+        </abp-card-header>
+        <abp-card-body class="component-card-body" style="padding-bottom: 0">
+            <abp-row>
+                <abp-row class="mb-custom-2">
+                    <abp-column size-md="_11" size-sm="_10" class="component-card-body-title">
+                        <div>@L["Page1.DashboardCustomerDetail.Title"]</div>
+                    </abp-column>
+                    <abp-column size-md="_1" size-sm="_2">
+                        <button type="button" class="btn question-tooltip-margin" data-toggle="tooltip" data-popper-placement="left" title="@L["Page1.DashboardCustomerDetail.Hint"].Value">
+                            <span class="lo-help-icon"></span>
+                        </button>
+                    </abp-column>
+                </abp-row>
+                @* <abp-column size-md="_12" size-xl="_4" size-sm="_6" class="border-right-blue-bell"> *@
+                @*     <abp-row class="center-component-chart"> *@
+                @*         <abp-column size="_12"> *@
+                @*             @if (Model.MetricItem.SocialDemographic.NonLikePageUserCount is not 0 && Model.MetricItem.SocialDemographic.NonLikePageUserPercent is not 0) *@
+                @*             { *@
+                @*                 <span class="@Model.MetricItem.SocialDemographic.NonLikePageUserPercent.GetColorClass(@Model.MetricItem.SocialDemographic.IsNonLikePageUserPositive) small-card-value"> *@
+                @*                      <span class="@Model.MetricItem.SocialDemographic.NonLikePageUserPercent.GetArrowClass()"></span> @Model.MetricItem.SocialDemographic.NonLikePageUserPercent.ToPositivePercent() *@
+                @*                 </span> *@
+                @*             } *@
+                @*             else *@
+                @*             { *@
+                @*                 @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false }, ViewData) *@
+                @*             } *@
+                @*         </abp-column> *@
+                @*         <abp-column size="_12"> *@
+                @*             <span class="veek-support-current-font ">@L["Page1.DashboardCustomerDetail.NoLikePage"]</span> *@
+                @*         </abp-column> *@
+                @*     </abp-row> *@
+                @* </abp-column> *@
+
+                <abp-column size-xl="_6" size-md="_12" class="border-right-blue-bell-xl mb-4">
+                    <abp-row class="center-component-chart">
+
+                        @if (Model.MetricItem.SocialDemographic.HouseOwnerCount is not 0 && Model.MetricItem.SocialDemographic.HouseOwnerPercent is not 0)
+                        {
+                            <abp-column>
+                                <span class="small-card-value">@Model.MetricItem.SocialDemographic.HouseOwnerCount.FormatNumber()</span>
+                                <b class="@Model.MetricItem.SocialDemographic.HouseOwnerPercent.GetColorClass() display-inline-bl">
+                                    <span class="@Model.MetricItem.SocialDemographic.HouseOwnerPercent.GetArrowClass()"></span> @Model.MetricItem.SocialDemographic.HouseOwnerPercent.ToPositivePercent()
+                                </b>
+                            </abp-column>
+                            <abp-column size="_12">
+                                <span class="veek-support-current-font ">@L["Page1.DashboardCustomerDetail.HadHouse"]</span>
+                            </abp-column>
+                        }
+                        else
+                        {
+                            <abp-column>
+                                <div>
+                                    @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, Title = L["Page1.DashboardCustomerDetail.HadHouse"].Value }, ViewData)
+                                </div>
+                            </abp-column>
+                        }
+                    </abp-row>
+                </abp-column>
+
+                <abp-column size-xl="_6" size-md="_12" class="mb-4">
+                    <abp-row class="center-component-chart">
+
+                        @if (Model.MetricItem.SocialDemographic.CarOwnerCount is not 0 && Model.MetricItem.SocialDemographic.CarOwnerPercent is not 0)
+                        {
+                            <abp-column>
+                                <span class="small-card-value">@Model.MetricItem.SocialDemographic.CarOwnerCount.FormatNumber()</span>
+                                <b class="@Model.MetricItem.SocialDemographic.CarOwnerPercent.GetColorClass() display-inline-bl">
+                                    <span class="@Model.MetricItem.SocialDemographic.CarOwnerPercent.GetArrowClass()"></span> @Model.MetricItem.SocialDemographic.CarOwnerPercent.ToPositivePercent()
+                                </b>
+                            </abp-column>
+                            <abp-column size="_12">
+                                <span class="veek-support-current-font ">@L["Page1.DashboardCustomerDetail.HadCar"]</span>
+                            </abp-column>
+                        }
+                        else
+                        {
+                            <abp-column>
+                                <div>
+                                    @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, Title = L["Page1.DashboardCustomerDetail.HadCar"].Value }, ViewData)
+                                </div>
+                            </abp-column>
+                        }
+
+                    </abp-row>
+                </abp-column>
+
+            </abp-row>
+            <abp-row>
+                <abp-column size-md="_12" size-xl="_4" size-sm="_12" class="mb-5 padding-left-age-social-user">
+                    <div style="font-weight: 600" class="veek-support-current-font mb-4">@L["Page1.DashboardCustomerDetail.CustomerAgeTitle"]</div>
+                    <abp-table border-style="Borderless" striped-rows="false" class="table-top-border-none">
+                        <tbody>
+                        @if (Model.MetricItem.SocialDemographic?.AgeMetrics != null && Model.MetricItem.SocialDemographic.AgeMetrics.Any(_ => _.AgeSegmentEnum is not AgeSegmentEnum.Age_1_17 and not AgeSegmentEnum.Age_65_Above))
+                        {
+                            @foreach (var item in Model.MetricItem.SocialDemographic.AgeMetrics.Where(_ => _.AgeSegmentEnum is not AgeSegmentEnum.Age_1_17 and not AgeSegmentEnum.Age_65_Above).OrderBy(_ => _.AgeSegmentEnum))
+                            {
+                                <tr>
+                                    <td class="tb-age-title">
+                                        <div style="font-weight: bold">
+                                            @L[$"Enum:AgeSegmentEnum:{item.AgeSegmentEnum.ToInt()}"]
+                                        </div>
+                                    </td>
+                                    <td class="tb-age-progress">
+                                        <abp-progress-bar value="@item.Percent.ToDouble()" class="LookOn-progress-bar-color-0"/>
+                                    </td>
+                                    <td style="width: 13%">
+                                        @item.Percent.ToPositivePercent()
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3">
+                                    @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = true }, ViewData)
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </abp-table>
+                </abp-column>
+                <abp-column size-xl="_4" size-md="_6" size-sm="_12" class="mb-5 display-flex" style="align-items: center">
+                    @if (Model.MetricItem.SocialDemographic.GenderMetrics.IsNotNullOrEmpty())
+                    {
+                        <div class="margin-top-social-chart" id="maleChart"></div>
+                    }
+                    else
+                    {
+                        <div>
+                            @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, Title = L["Gender"].Value }, ViewData)
+                        </div>
+                    }
+                </abp-column>
+                <abp-column size-xl="_4" size-md="_6" size-sm="_12" class="mb-5 display-flex" style="align-items: center">
+                    @if (Model.MetricItem.SocialDemographic.RelationshipMetrics.IsNotNullOrEmpty())
+                    {
+                        <div class="margin-top-social-chart" id="relationshipChart"></div>
+                    }
+                    else
+                    {
+                        <div>
+                            @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, Title = L["Relationship"].Value }, ViewData)
+                        </div>
+                    }
+                </abp-column>
+            </abp-row>
+        </abp-card-body>
+    </abp-card>
+}
+
+
+@* SocialCustomerByCity *@
+@if (Model.MetricItem.SocialLocationByProvinces is not null && Model.DataType.ToInt().IsInsightDataType(InsightDataHelper.SocialDataNums))
+{
+    <abp-card>
+        <abp-card-header class="component-card-header">
+            <abp-row class="mb-2">
+                <div class="note-icon-header">
+                </div>
+            </abp-row>
+        </abp-card-header>
+        <abp-card-body class="component-card-body">
+            <abp-row>
+                <abp-row class="mb-custom-2">
+                    <abp-column size-md="_11" size-sm="_10" class="component-card-body-title">
+                        <div>@L["Page1.DashboardCustomerByCity.Title"]</div>
+                    </abp-column>
+                    <abp-column size-md="_1" size-sm="_2">
+                        <button type="button" class="btn question-tooltip-margin" data-toggle="tooltip" data-popper-placement="left" title="@L["Page1.DashboardCustomerByCity.Hint"].Value">
+                            <span class="lo-help-icon"></span>
+                        </button>
+                    </abp-column>
+                </abp-row>
+
+                <abp-column size-md="_12">
+                    @if (Model.MetricItem.SocialLocationByProvinces.IsNotNullOrEmpty())
+                    {
+                        <abp-table border-style="Borderless" striped-rows="false" class="table-top-products">
+                            <thead>
+                            <tr>
+                                <th class="veek-support-current-font " scope="Column"></th>
+                                <th class="veek-support-current-font " scope="Column">@L["Page1.DashboardCustomerByCity.Province"]</th>
+                                <th class="veek-support-current-font " scope="Column">@L["Page1.DashboardCustomerByCity.Interested"]</th>
+                                <th class="veek-support-current-font " scope="Column">@L["Page1.DashboardCustomerByCity.Rate"]</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            @foreach (var province in Model.MetricItem.SocialLocationByProvinces)
+                            {
+                                <tr>
+                                    <th style="width: 7%" scope="Row">@((Model.MetricItem.SocialLocationByProvinces.IndexOf(province) + 1).ToString("D2"))</th>
+                                    <td style="width: 20%">@province.Name</td>
+                                    <td style="width: 60%">
+                                        <abp-progress-bar value="@province.Percent.ToDouble()" class="@Model.MetricItem.SocialLocationByProvinces.IndexOf(province).GetProgressColorClass()"/>
+                                    </td>
+                                    <td style="width: 13%">
+                                        @province.Percent.ToPositivePercent()
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </abp-table>
+                    }
+                    else
+                    {
+                        <tr>
+                            <th colspan="5">@await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = true }, ViewData)</th>
+                        </tr>
+                    }
+                </abp-column>
+            </abp-row>
+        </abp-card-body>
+    </abp-card>
+}
+
+
+@* SocialCommunityInteraction *@
+@if (Model.MetricItem.SocialCommunityInteraction is not null && Model.DataType.ToInt().IsInsightDataType(InsightDataHelper.SocialDataNums))
+{
+    <abp-card>
+        <abp-card-header class="component-card-header">
+            <abp-row class="mb-2">
+                <div class="note-icon-header">
+                </div>
+            </abp-row>
+        </abp-card-header>
+        <abp-card-body class="component-card-body">
+            <abp-row>
+                <abp-row class="mb-custom-2">
+                    <abp-column size-md="_11" size-sm="_10" class="component-card-body-title">
+                        <div>@L["Page1.DashboardSocial.Title"]</div>
+                    </abp-column>
+                    <abp-column size-md="_1" size-sm="_2">
+                        <button type="button" class="btn question-tooltip-margin" data-toggle="tooltip" data-popper-placement="left" title="@L["Page1.DashboardSocial.Hint"].Value">
+                            <span class="lo-help-icon"></span>
+                        </button>
+                    </abp-column>
+                </abp-row>
+                <abp-column size-xl="_6" size-md="_12" class="mb-sm-2 social-table-padding">
+                    <div>
+                        <h4 class="veek-support-current-font mb-4">
+                            @L["Page1.DashboardSocial.TopUsersFollowed"]
+                        </h4>
+                    </div>
+                    <abp-table border-style="Borderless" striped-rows="false" class="table-top-border-none">
+                        <tbody class="border-right-blue-bell-xl">
+                        @if (Model.MetricItem.SocialCommunityInteraction.TopFollowerMetrics.IsNotNullOrEmpty())
+                        {
+                            @foreach (var item in Model.MetricItem.SocialCommunityInteraction.TopFollowerMetrics)
+                            {
+                                <tr>
+                                    <td style="width: 27%;">
+                                        <div class="social-table-ellipsis-text" data-toggle="tooltip" data-popper-placement="left" title="@L[$"Enum:InfluencerTypeByFollower:{item.InfluencerTypeByFollower.ToInt()}"].Value">
+                                            @L[$"Enum:InfluencerTypeByFollower:{item.InfluencerTypeByFollower.ToInt()}"]
+                                        </div>
+                                    </td>
+                                    <td style="width: 60%">
+                                        <abp-progress-bar value="@item.Percent.ToDouble()" class="LookOn-progress-bar-color-0"/>
+                                    </td>
+                                    <td style="width: 13%">
+                                        @item.Percent.ToPositivePercent()
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = true }, ViewData)
+                        }
+                        </tbody>
+                    </abp-table>
+                </abp-column>
+
+
+                <abp-column size-xl="_6" size-md="_12" class="mb-sm-2">
+                    <h4 class="veek-support-current-font mb-4">
+                        @L["Page1.DashboardSocial.TopPagesLiked"]
+                    </h4>
+                    <abp-table border-style="Borderless" striped-rows="false" class="table-top-border-none">
+                        <tbody>
+                        @if (Model.MetricItem.SocialCommunityInteraction.TopLikedPageMetrics.IsNotNullOrEmpty())
+                        {
+                            @foreach (var item in Model.MetricItem.SocialCommunityInteraction.TopLikedPageMetrics)
+                            {
+                                <tr>
+                                    <td style="width: 27%;">
+                                        <div class="social-table-ellipsis-text" data-toggle="tooltip" data-popper-placement="left" title="@item.Name">
+                                            @item.Name
+                                        </div>
+
+                                    </td>
+                                    <td style="width: 60%">
+                                        <abp-progress-bar value="@item.Percent.ToDouble()" class="LookOn-progress-bar-color-0"/>
+                                    </td>
+                                    <td style="width: 13%">
+                                        @item.Percent.ToPositivePercent()
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = true }, ViewData)
+                        }
+                        </tbody>
+                    </abp-table>
+                </abp-column>
+
+                <abp-column size-xl="_6" size-md="_12" class="mb-sm-2 social-table-padding">
+                    <h4 class="veek-support-current-font mb-4">
+                        @L["Page1.DashboardSocial.TopLocationsCheckedIn"]
+                    </h4>
+                    <abp-table border-style="Borderless" striped-rows="false" class="table-top-border-none">
+                        <tbody class="border-right-blue-bell-xl">
+                        @if (Model.MetricItem.SocialCommunityInteraction.TopCheckinLocations.IsNotNullOrEmpty())
+                        {
+                            @foreach (var item in Model.MetricItem.SocialCommunityInteraction.TopCheckinLocations)
+                            {
+                                <tr>
+                                    <td style="width: 27%;">
+                                        <div class="social-table-ellipsis-text" data-toggle="tooltip" data-popper-placement="left" title="@item.Name">
+                                            @item.Name
+                                        </div>
+                                    </td>
+                                    <td style="width: 60%">
+                                        <abp-progress-bar value="@item.Percent.ToDouble()" class="LookOn-progress-bar-color-0"/>
+                                    </td>
+                                    <td style="width: 13%">
+                                        @item.Percent.ToPositivePercent()
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = true }, ViewData)
+                        }
+                        </tbody>
+                    </abp-table>
+                </abp-column>
+
+                <abp-column size-xl="_6" size-md="_12" class="mb-sm-2">
+                    <h4 class="veek-support-current-font mb-4">
+                        @L["Page1.DashboardSocial.TopGroups"]
+                    </h4>
+                    <abp-table border-style="Borderless" class="table-top-border-none">
+                        <tbody>
+                        @if (Model.MetricItem.SocialCommunityInteraction.TopGroups.IsNotNullOrEmpty())
+                        {
+                            @foreach (var item in Model.MetricItem.SocialCommunityInteraction.TopGroups)
+                            {
+                                <tr>
+                                    <td style="width: 27%;">
+                                        <div class="social-table-ellipsis-text" data-toggle="tooltip" data-popper-placement="left" title="@item.Name">
+                                            @item.Name
+                                        </div>
+                                    </td>
+                                    <td style="width: 60%">
+                                        <abp-progress-bar value="@item.Percent.ToDouble()" class="LookOn-progress-bar-color-0"/>
+                                    </td>
+                                    <td style="width: 13%">
+                                        @item.Percent.ToPositivePercent()
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = true }, ViewData)
+                        }
+                        </tbody>
+                    </abp-table>
+                </abp-column>
+            </abp-row>
+        </abp-card-body>
+    </abp-card>
+}
+
+@* EcomAdvanced *@
+@if (Model.MetricItem.EcomAdvanced is not null && Model.DataType.ToInt().IsInsightDataType(InsightDataHelper.AdvanceDataNums))
+{
+    <abp-card>
+    <abp-card-header class="component-card-header">
+        <abp-row class="mb-2">
+            <div class="note-icon-header">
+            </div>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body class="component-card-body">
+    <abp-row class="mb-custom-2">
+        <abp-column size-md="_11" size-sm="_10" class="component-card-body-title">
+            <div>@L["Page1.DashboardOther.Title"]</div>
+        </abp-column>
+        <abp-column size-md="_1" size-sm="_2">
+            <button type="button" class="btn question-tooltip-margin" data-toggle="tooltip" data-popper-placement="left" title="@L["Page1.DashboardOther.Hint"].Value">
+                <span class="lo-help-icon"></span>
+            </button>
+        </abp-column>
+    </abp-row>
+    <abp-row class="mb-5">
+        @if (Model.DataType.ToInt().IsInsightDataType(InsightDataHelper.EcomDataNums))
+        {
+            if (Model.DataType.ToInt() == 2)
+            {
+                <abp-column size-md="_4" size-sm="_12" class="mb-4 border-right-blue-bell-md">
+                    <abp-row class="text-center">
+                        @if (Model.MetricItem.EcomAdvanced.EcomCustomersNoOrderInXMonthsCount > 0)
+                        {
+                            <abp-column class="mb-3">
+                                <span class="small-card-value">@Model.MetricItem.EcomAdvanced.EcomCustomersNoOrderInXMonthsCount.FormatNumber()</span>
+                                <b class="@Model.MetricItem.EcomAdvanced.EcomCustomersNoOrderInXMonthsPercent.GetColorClass(@Model.MetricItem.EcomAdvanced.IsEcomCustomersNoOrderInXMonthsPositive) display-inline-bl"> @Model.MetricItem.EcomAdvanced.EcomCustomersNoOrderInXMonthsPercent.ToPositivePercent()</b>
+                            </abp-column>
+                            <abp-column size-md="_12">
+                                <div class="veek-support-current-font ">@L["Page1.DashboardOther.UserNotBuyInXMonths", ViewData["Ecom_RetentionThresholdInMonth"]]</div>
+                            </abp-column>
+                        }
+                        else
+                        {
+                            <div>
+                                @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, Title = L["Page1.DashboardOther.UserNotBuyInXMonths", ViewData["Ecom_RetentionThresholdInMonth"]].Value }, ViewData)
+                            </div>
+                        }
+                    </abp-row>
+                </abp-column>
+
+                <abp-column size-md="_4" size-sm="_12" class="mb-4 border-right-blue-bell-md">
+                    <abp-row class="text-center">
+                        @if (Model.MetricItem.EcomAdvanced.AverageOrderValueComparedToTheWorld > 0)
+                        {
+                            <abp-column class="mb-3">
+                                <span class="small-card-value" style="min-height: 60px">@((decimal)ViewData["OrderTotalKPI"] == 0 ? "" : Model.MetricItem.EcomAdvanced.AverageOrderValueComparedToTheWorld.FormatNumber())</span>
+                                <b class="@((Model.MetricItem.EcomAdvanced.AverageOrderValueComparedToTheWorldPercent - 100).GetColorClass()) display-inline-bl"> @(Model.MetricItem.EcomAdvanced.AverageOrderValueComparedToTheWorldPercent >= 100 ? (Model.MetricItem.EcomAdvanced.AverageOrderValueComparedToTheWorldPercent - 100).ToPositivePercent() : (100 - Model.MetricItem.EcomAdvanced.AverageOrderValueComparedToTheWorldPercent).ToPositivePercent())</b>
+                            </abp-column>
+                            <abp-column size-md="_12">
+                                <span class="veek-support-current-font ">@Model.AverageOrderTitle</span>
+                            </abp-column>
+                        }
+                        else
+                        {
+                            <div>
+                                @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, Title = Model.AverageOrderTitle }, ViewData)
+                            </div>
+                        }
+                    </abp-row>
+                </abp-column>
+
+                <abp-column size-md="_4" size-sm="_12">
+                    <abp-row class="text-center">
+                        @if (Model.MetricItem.EcomAdvanced.Only1OrderPurchasedCustomersCount > 0)
+                        {
+                            <abp-column class="mb-3">
+                                <span class="small-card-value">@Model.MetricItem.EcomAdvanced.Only1OrderPurchasedCustomersCount.FormatNumber()</span>
+                                <b class="@Model.MetricItem.EcomAdvanced.Only1OrderPurchasedCustomersPercent.GetColorClass(@Model.MetricItem.EcomAdvanced.IsOnly1OrderPurchasedCustomersPositive) display-inline-bl">
+                                    @Model.MetricItem.EcomAdvanced.Only1OrderPurchasedCustomersPercent.ToPositivePercent()
+                                </b>
+                            </abp-column>
+                            <abp-column size-md="_12">
+                                <span class="veek-support-current-font ">@L["Page1.DashboardOther.UserOnly1Order"]</span>
+                            </abp-column>
+                        }
+                        else
+                        {
+                            <div>
+                                @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, Title = L["Page1.DashboardOther.UserOnly1Order"].Value }, ViewData)
+                            </div>
+                        }
+                    </abp-row>
+                </abp-column>
+            }
+            else
+            {
+                <abp-column size-xl="_3" size-md="_6" size-sm="_12" size-lg="_6" class="mb-4 border-right-blue-bell-md">
+                    <abp-row class="text-center">
+                        @if (Model.MetricItem.EcomAdvanced.EcomCustomersNoOrderInXMonthsCount > 0)
+                        {
+                            <abp-column class="mb-3">
+                                <span class="small-card-value">@Model.MetricItem.EcomAdvanced.EcomCustomersNoOrderInXMonthsCount.FormatNumber()</span>
+                                <b class="@Model.MetricItem.EcomAdvanced.EcomCustomersNoOrderInXMonthsPercent.GetColorClass(@Model.MetricItem.EcomAdvanced.IsEcomCustomersNoOrderInXMonthsPositive) display-inline-bl"> @Model.MetricItem.EcomAdvanced.EcomCustomersNoOrderInXMonthsPercent.ToPositivePercent()</b>
+                            </abp-column>
+                            <abp-column size-md="_12">
+                                <div class="veek-support-current-font ">@L["Page1.DashboardOther.UserNotBuyInXMonths", ViewData["Ecom_RetentionThresholdInMonth"]]</div>
+                            </abp-column>
+                        }
+                        else
+                        {
+                            <div>
+                                @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, Title = L["Page1.DashboardOther.UserNotBuyInXMonths", ViewData["Ecom_RetentionThresholdInMonth"]].Value }, ViewData)
+                            </div>
+                        }
+                    </abp-row>
+                </abp-column>
+
+                <abp-column size-xl="_3" size-md="_6" size-sm="_12" size-lg="_6" class="mb-4 border-right-blue-bell-xl">
+                    <abp-row class="text-center">
+                        @if (Model.MetricItem.EcomAdvanced.AverageOrderValueComparedToTheWorld > 0)
+                        {
+                            <abp-column class="mb-3">
+                                <span class="small-card-value" style="min-height: 60px">@((decimal)ViewData["OrderTotalKPI"] == 0 ? "" : Model.MetricItem.EcomAdvanced.AverageOrderValueComparedToTheWorld.FormatNumber())</span>
+                                <b class="@((Model.MetricItem.EcomAdvanced.AverageOrderValueComparedToTheWorldPercent - 100).GetColorClass()) display-inline-bl"> @(Model.MetricItem.EcomAdvanced.AverageOrderValueComparedToTheWorldPercent >= 100 ? (Model.MetricItem.EcomAdvanced.AverageOrderValueComparedToTheWorldPercent - 100).ToPositivePercent() : (100 - Model.MetricItem.EcomAdvanced.AverageOrderValueComparedToTheWorldPercent).ToPositivePercent())</b>
+                            </abp-column>
+                            <abp-column size-md="_12">
+                                <span class="veek-support-current-font ">@Model.AverageOrderTitle</span>
+                            </abp-column>
+                        }
+                        else
+                        {
+                            <div>
+                                @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, Title = Model.AverageOrderTitle }, ViewData)
+                            </div>
+                        }
+                    </abp-row>
+                </abp-column>
+
+                <abp-column size-xl="_3" size-md="_6" size-sm="_12" size-lg="_6" class="mb-4 border-right-blue-bell-md">
+                    <abp-row class="text-center">
+                        @if (Model.MetricItem.EcomAdvanced.Only1OrderPurchasedCustomersCount > 0)
+                        {
+                            <abp-column class="mb-3">
+                                <span class="small-card-value">@Model.MetricItem.EcomAdvanced.Only1OrderPurchasedCustomersCount.FormatNumber()</span>
+                                <b class="@Model.MetricItem.EcomAdvanced.Only1OrderPurchasedCustomersPercent.GetColorClass(@Model.MetricItem.EcomAdvanced.IsOnly1OrderPurchasedCustomersPositive) display-inline-bl">
+                                    @Model.MetricItem.EcomAdvanced.Only1OrderPurchasedCustomersPercent.ToPositivePercent()
+                                </b>
+                            </abp-column>
+                            <abp-column size-md="_12">
+                                <span class="veek-support-current-font ">@L["Page1.DashboardOther.UserOnly1Order"]</span>
+                            </abp-column>
+                        }
+                        else
+                        {
+                            <div>
+                                @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, Title = L["Page1.DashboardOther.UserOnly1Order"].Value }, ViewData)
+                            </div>
+                        }
+                    </abp-row>
+                </abp-column>
+            }
+        }
+
+        @if (Model.DataType.ToInt().IsInsightDataType(InsightDataHelper.TotalityDataNums))
+        {
+            if (Model.DataType.ToInt() == 3)
+            {
+                <abp-column size="_12">
+                    <abp-row class="text-center">
+                        @if (Model.MetricItem.EcomAdvanced.RevenueEcomCustomerHasMoreThan1000FollowerAndFriend > 0)
+                        {
+                            <abp-column class="mb-3">
+                                <span class="small-card-value">@Model.MetricItem.EcomAdvanced.RevenueEcomCustomerHasMoreThan1000FollowerAndFriend.FormatNumber()</span>
+                                <b class="veek-positive-current-font  display-inline-bl">
+                                    @Model.MetricItem.EcomAdvanced.RevenueEcomCustomerHasMoreThan1000FollowerAndFriendPercent.ToPositivePercent()
+                                </b>
+                            </abp-column>
+                            <abp-column size-md="_12">
+                                <span class="veek-support-current-font ">@L["Page1.DashboardOther.1000FollowedUserContribute"]</span>
+                            </abp-column>
+                        }
+                        else
+                        {
+                            <div>
+                                @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, Title = L["Page1.DashboardOther.1000FollowedUserContribute"].Value }, ViewData)
+                            </div>
+                        }
+                    </abp-row>
+                </abp-column>
+            }
+            else
+            {
+                <abp-column size-xl="_3" size-md="_6" size-sm="_12" size-lg="_6">
+                    <abp-row class="text-center">
+                        @if (Model.MetricItem.EcomAdvanced.RevenueEcomCustomerHasMoreThan1000FollowerAndFriend > 0)
+                        {
+                            <abp-column class="mb-3">
+                                <span class="small-card-value">@Model.MetricItem.EcomAdvanced.RevenueEcomCustomerHasMoreThan1000FollowerAndFriend.FormatNumber()</span>
+                                <b class="veek-positive-current-font  display-inline-bl">
+                                    @Model.MetricItem.EcomAdvanced.RevenueEcomCustomerHasMoreThan1000FollowerAndFriendPercent.ToPositivePercent()
+                                </b>
+                            </abp-column>
+                            <abp-column size-md="_12">
+                                <span class="veek-support-current-font ">@L["Page1.DashboardOther.1000FollowedUserContribute"]</span>
+                            </abp-column>
+                        }
+                        else
+                        {
+                            <div>
+                                @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, Title = L["Page1.DashboardOther.1000FollowedUserContribute"].Value }, ViewData)
+                            </div>
+                        }
+                    </abp-row>
+                </abp-column>
+            }
+        }
+    </abp-row>
+    </abp-card-body>
+    </abp-card>
+}
+
+@* SocialComparision *@
+@if (Model.MetricItem.SocialComparision is not null)
+{
+    <abp-card>
+    <abp-card-header class="component-card-header">
+        <abp-row class="mb-2">
+            <div class="note-icon-header">
+            </div>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body class="component-card-body">
+    <abp-row>
+    <abp-row class="mb-6">
+        <abp-column size-md="_11" size-sm="_9" class="component-card-body-title">
+            <div>@L["Page2.DashboardCustomerCompare.Title"]</div>
+        </abp-column>
+        <abp-column size-md="_1" size-sm="_3" size="_12">
+            <button type="button" class="btn question-tooltip-margin" data-toggle="tooltip" data-popper-placement="left" title="@L["Page2.DashboardCustomerCompare.Title"].Value">
+                <span class="lo-help-icon"></span>
+            </button>
+        </abp-column>
+    </abp-row>
+    <abp-column class="social-comparision-icon-col">
+        <div class="d-block group-user">
+            <img src="~/images/icons/group-user.png" alt=""/>
+        </div>
+        <p style="font-size: 17px;font-weight: bold" class="mt-3">@L["Page2.DashboardCustomerCompare.UserHasPurchase"]</p>
+    </abp-column>
+    <abp-column class="justify-content-center social-comparision-table-col">
+
+    @if (Model.MetricItem.SocialComparision.GenderComparision is not null)
+    {
+        <abp-table striped-rows="false" border-style="Borderless" class="table-top-products">
+            <tbody>
+            <tr>
+                <th colspan="4" class="text-center">@L["Page2.DashboardCustomerCompare.Gender"]</th>
+            </tr>
+            <tr>
+                @if (@Model.MetricItem.SocialComparision.GenderComparision.PurchaseGenderPercent != 0)
+                {
+                    <td style="width: 10%">@Model.MetricItem.SocialComparision.GenderComparision.PurchaseGenderPercent.ToPositivePercent()</td>
+                    <td style="min-width: 100px;width: 40%">
+                        <div class="progress-bar-reverse">
+                            <div class="progress social-comparision-progress">
+                                <div class="progress-bar social-comparision-progress-bar @CssConst.GetCompareProgressColor(Model.MetricItem.SocialComparision.GenderComparision.PurchaseGenderPercent, Model.MetricItem.SocialComparision.GenderComparision.NonPurchaseGenderPercent)"
+                                     role="progressbar" style="width: @Model.MetricItem.SocialComparision.GenderComparision.PurchaseGenderPercent.ToDouble().NumberFormatForCss()%"
+                                     aria-valuenow="@Model.MetricItem.SocialComparision.GenderComparision.PurchaseGenderPercent.ToDouble().NumberFormatForCss()" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="opacity-50">
+                            @Model.MetricItem.SocialComparision.GenderComparision.PurchasedGenderName
+                        </div>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, HasImage = false, IsInverse = true }, ViewData)
+                    </td>
+                }
+                @if (@Model.MetricItem.SocialComparision.GenderComparision.NonPurchaseGenderPercent != 0)
+                {
+                    <td style="min-width: 100px;width: 40%">
+                        <div class="progress social-comparision-progress">
+                            <div class="progress-bar social-comparision-progress-bar @CssConst.GetCompareProgressColor(Model.MetricItem.SocialComparision.GenderComparision.NonPurchaseGenderPercent, Model.MetricItem.SocialComparision.GenderComparision.PurchaseGenderPercent)"
+                                 role="progressbar" style="width: @Model.MetricItem.SocialComparision.GenderComparision.NonPurchaseGenderPercent.ToDouble().NumberFormatForCss()%"
+                                 aria-valuenow="@Model.MetricItem.SocialComparision.GenderComparision.NonPurchaseGenderPercent.ToDouble().NumberFormatForCss()" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                        <div class="text-right opacity-50">
+                            @Model.MetricItem.SocialComparision.GenderComparision.NonPurchasedGenderName
+                        </div>
+                    </td>
+                    <td style="width: 10%" class="text-right">
+                        @Model.MetricItem.SocialComparision.GenderComparision.NonPurchaseGenderPercent.ToPositivePercent()
+                    </td>
+                }
+                else
+                {
+                    <td style="width: 50%">
+                        @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, HasImage = false, IsInverse = false }, ViewData)
+                    </td>
+                }
+            </tr>
+            </tbody>
+        </abp-table>
+    }
+    @if (Model.MetricItem.SocialComparision.AgeComparision is not null)
+    {
+        <abp-table striped-rows="false" border-style="Borderless" class="table-top-products">
+            <tbody>
+            <tr>
+                <th colspan="4" class="text-center">@L["Page2.DashboardCustomerCompare.Age"]</th>
+            </tr>
+            <tr>
+                @if (@Model.MetricItem.SocialComparision.AgeComparision.PurchasedAgePercent != 0)
+                {
+                    <td style="width: 10%">@Model.MetricItem.SocialComparision.AgeComparision.PurchasedAgePercent.ToPositivePercent()</td>
+                    <td style="min-width: 100px;width: 40%">
+                        <div class="progress-bar-reverse">
+                            <div class="progress social-comparision-progress">
+                                <div class="progress-bar social-comparision-progress-bar @CssConst.GetCompareProgressColor(Model.MetricItem.SocialComparision.AgeComparision.PurchasedAgePercent, Model.MetricItem.SocialComparision.AgeComparision.NonPurchasedAgePercent)"
+                                     role="progressbar" style="width: @Model.MetricItem.SocialComparision.AgeComparision.PurchasedAgePercent.ToDouble().NumberFormatForCss()%"
+                                     aria-valuenow="@Model.MetricItem.SocialComparision.AgeComparision.PurchasedAgePercent.ToDouble().NumberFormatForCss()" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="opacity-50">
+                            @Model.MetricItem.SocialComparision.AgeComparision.PurchasedAge
+                        </div>
+                    </td>
+                }
+                else
+                {
+                    <td style="width: 50%">
+                        @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, HasImage = false, IsInverse = true }, ViewData)
+                    </td>
+                }
+
+                @if (@Model.MetricItem.SocialComparision.AgeComparision.NonPurchasedAgePercent != 0)
+                {
+                    <td style="min-width: 100px;width: 40%">
+                        <div class="progress social-comparision-progress">
+                            <div class="progress-bar social-comparision-progress-bar @CssConst.GetCompareProgressColor(Model.MetricItem.SocialComparision.AgeComparision.NonPurchasedAgePercent, Model.MetricItem.SocialComparision.AgeComparision.PurchasedAgePercent)"
+                                 role="progressbar" style="width: @Model.MetricItem.SocialComparision.AgeComparision.NonPurchasedAgePercent.ToDouble().NumberFormatForCss()%"
+                                 aria-valuenow="@Model.MetricItem.SocialComparision.AgeComparision.NonPurchasedAgePercent.ToDouble().NumberFormatForCss()" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                        <div class="text-right opacity-50">
+                            @Model.MetricItem.SocialComparision.AgeComparision.NonPurchasedAge
+                        </div>
+                    </td>
+                    <td style="width: 10%" class="text-right">
+                        @Model.MetricItem.SocialComparision.AgeComparision.NonPurchasedAgePercent.ToPositivePercent()
+                    </td>
+                }
+                else
+                {
+                    <td style="width: 50%">
+                        @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, HasImage = false, IsInverse = false }, ViewData)
+                    </td>
+                }
+
+            </tr>
+            </tbody>
+        </abp-table>
+    }
+    @if (Model.MetricItem.SocialComparision.HouseOwnerComparision is not null)
+    {
+        <abp-table striped-rows="false" border-style="Borderless" class="table-top-products">
+            <tbody>
+            <tr>
+                <th colspan="4" class="text-center">@L["Page2.DashboardCustomerCompare.HouseOwnerRate"]</th>
+            </tr>
+            <tr>
+                @if (@Model.MetricItem.SocialComparision.HouseOwnerComparision.PurchasedHouseOwnerPercent != 0)
+                {
+                    <td style="width: 10%">@Model.MetricItem.SocialComparision.HouseOwnerComparision.PurchasedHouseOwnerPercent.ToPositivePercent()</td>
+                    <td style="min-width: 100px;width: 40%">
+                        <div class="progress-bar-reverse">
+                            <div class="progress social-comparision-progress">
+                                <div class="progress-bar social-comparision-progress-bar @CssConst.GetCompareProgressColor(Model.MetricItem.SocialComparision.HouseOwnerComparision.PurchasedHouseOwnerPercent, Model.MetricItem.SocialComparision.HouseOwnerComparision.NonPurchasedHouseOwnerPercent)"
+                                     role="progressbar" style="width: @Model.MetricItem.SocialComparision.HouseOwnerComparision.PurchasedHouseOwnerPercent.ToDouble().NumberFormatForCss()%"
+                                     aria-valuenow="@Model.MetricItem.SocialComparision.HouseOwnerComparision.PurchasedHouseOwnerPercent.ToDouble().NumberFormatForCss()" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="opacity-50">
+                            @Model.MetricItem.SocialComparision.HouseOwnerComparision.PurchasedHouseOwnerStatus
+                        </div>
+                    </td>
+                }
+                else
+                {
+                    <td style="width: 50%">
+                        @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, HasImage = false, IsInverse = true }, ViewData)
+                    </td>
+                }
+
+                @if (@Model.MetricItem.SocialComparision.HouseOwnerComparision.NonPurchasedHouseOwnerPercent != 0)
+                {
+                    <td style="min-width: 100px;width: 40%">
+                        <div class="progress social-comparision-progress">
+                            <div class="progress-bar social-comparision-progress-bar @CssConst.GetCompareProgressColor(Model.MetricItem.SocialComparision.HouseOwnerComparision.NonPurchasedHouseOwnerPercent, Model.MetricItem.SocialComparision.HouseOwnerComparision.PurchasedHouseOwnerPercent)"
+                                 role="progressbar" style="width: @Model.MetricItem.SocialComparision.HouseOwnerComparision.NonPurchasedHouseOwnerPercent.ToDouble().NumberFormatForCss()%"
+                                 aria-valuenow="@Model.MetricItem.SocialComparision.HouseOwnerComparision.NonPurchasedHouseOwnerPercent.ToDouble().NumberFormatForCss()" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                        <div class="text-right opacity-50">
+                            @Model.MetricItem.SocialComparision.HouseOwnerComparision.NonPurchasedHouseOwnerStatus
+                        </div>
+                    </td>
+                    <td style="width: 10%" class="text-right">
+                        @Model.MetricItem.SocialComparision.HouseOwnerComparision.NonPurchasedHouseOwnerPercent.ToPositivePercent()
+                    </td>
+                }
+                else
+                {
+                    <td style="width: 50%">
+                        @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, HasImage = false, IsInverse = false }, ViewData)
+                    </td>
+                }
+            </tr>
+            </tbody>
+        </abp-table>
+    }
+
+    @if (Model.MetricItem.SocialComparision.CarOwnerComparision is not null)
+    {
+        <abp-table striped-rows="false" border-style="Borderless" class="table-top-products">
+            <tbody>
+            <tr>
+                <th colspan="4" class="text-center">@L["Page2.DashboardCustomerCompare.CarOwnerRate"]</th>
+            </tr>
+            <tr>
+                @if (@Model.MetricItem.SocialComparision.CarOwnerComparision.PurchasedCarOwnerPercent != 0)
+                {
+                    <td style="width: 10%">@Model.MetricItem.SocialComparision.CarOwnerComparision.PurchasedCarOwnerPercent.ToPositivePercent()</td>
+                    <td style="min-width: 100px;width: 40%">
+                        <div class="progress-bar-reverse">
+                            <div class="progress social-comparision-progress">
+                                <div class="progress-bar social-comparision-progress-bar @CssConst.GetCompareProgressColor(Model.MetricItem.SocialComparision.CarOwnerComparision.PurchasedCarOwnerPercent, Model.MetricItem.SocialComparision.CarOwnerComparision.NonPurchasedCarOwnerPercent)"
+                                     role="progressbar" style="width: @Model.MetricItem.SocialComparision.CarOwnerComparision.PurchasedCarOwnerPercent.ToDouble().NumberFormatForCss()%"
+                                     aria-valuenow="@Model.MetricItem.SocialComparision.CarOwnerComparision.PurchasedCarOwnerPercent.ToDouble().NumberFormatForCss()" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="opacity-50">
+                            @Model.MetricItem.SocialComparision.CarOwnerComparision.PurchasedCarOwnerStatus
+                        </div>
+                    </td>
+                }
+                else
+                {
+                    <td style="width: 50%">
+                        @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, HasImage = false, IsInverse = true }, ViewData)
+                    </td>
+                }
+
+                @if (@Model.MetricItem.SocialComparision.CarOwnerComparision.NonPurchasedCarOwnerPercent != 0)
+                {
+                    <td style="min-width: 100px;width: 40%">
+                        <div class="progress social-comparision-progress">
+                            <div class="progress-bar social-comparision-progress-bar @CssConst.GetCompareProgressColor(Model.MetricItem.SocialComparision.CarOwnerComparision.NonPurchasedCarOwnerPercent, Model.MetricItem.SocialComparision.CarOwnerComparision.PurchasedCarOwnerPercent)"
+                                 role="progressbar" style="width: @Model.MetricItem.SocialComparision.CarOwnerComparision.NonPurchasedCarOwnerPercent.ToDouble().NumberFormatForCss()%"
+                                 aria-valuenow="@Model.MetricItem.SocialComparision.CarOwnerComparision.NonPurchasedCarOwnerPercent.ToDouble().NumberFormatForCss()" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                        <div class="text-right opacity-50">
+                            @Model.MetricItem.SocialComparision.CarOwnerComparision.NonPurchasedCarOwnerStatus
+                        </div>
+                    </td>
+                    <td style="width: 10%" class="text-right">
+                        @Model.MetricItem.SocialComparision.CarOwnerComparision.NonPurchasedCarOwnerPercent.ToPositivePercent()
+                    </td>
+                }
+                else
+                {
+                    <td style="width: 50%">
+                        @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, HasImage = false, IsInverse = false }, ViewData)
+                    </td>
+                }
+
+            </tr>
+            </tbody>
+        </abp-table>
+    }
+    @if (Model.MetricItem.SocialComparision.RelationshipComparision is not null)
+    {
+        <abp-table striped-rows="false" border-style="Borderless" class="table-top-products">
+            <tbody>
+            <tr>
+                <th colspan="4" class="text-center">@L["Page2.DashboardCustomerCompare.RelationShip"]</th>
+            </tr>
+            <tr>
+                @if (@Model.MetricItem.SocialComparision.RelationshipComparision.PurchasedRelationshipPercent != 0)
+                {
+                    <td style="width: 10%">@Model.MetricItem.SocialComparision.RelationshipComparision.PurchasedRelationshipPercent.ToPositivePercent()</td>
+                    <td style="min-width: 100px; width: 40%">
+                        <div class="progress-bar-reverse">
+                            <div class="progress social-comparision-progress">
+                                <div class="progress-bar social-comparision-progress-bar @CssConst.GetCompareProgressColor(Model.MetricItem.SocialComparision.RelationshipComparision.PurchasedRelationshipPercent, Model.MetricItem.SocialComparision.RelationshipComparision.NonPurchasedRelationshipPercent)"
+                                     role="progressbar" style="width: @Model.MetricItem.SocialComparision.RelationshipComparision.PurchasedRelationshipPercent.ToDouble().NumberFormatForCss()%"
+                                     aria-valuenow="@Model.MetricItem.SocialComparision.RelationshipComparision.PurchasedRelationshipPercent.ToDouble().NumberFormatForCss()" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="opacity-50">
+                            @Model.MetricItem.SocialComparision.RelationshipComparision.PurchasedRelationship
+                        </div>
+                    </td>
+                }
+                else
+                {
+                    <td style="width: 50%">
+                        @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, HasImage = false, IsInverse = true }, ViewData)
+                    </td>
+                }
+
+                @if (@Model.MetricItem.SocialComparision.RelationshipComparision.NonPurchasedRelationshipPercent != 0)
+                {
+                    <td style="min-width: 100px;width: 40%">
+                        <div class="progress social-comparision-progress">
+                            <div class="progress-bar social-comparision-progress-bar @CssConst.GetCompareProgressColor(Model.MetricItem.SocialComparision.RelationshipComparision.NonPurchasedRelationshipPercent, Model.MetricItem.SocialComparision.RelationshipComparision.PurchasedRelationshipPercent)"
+                                 role="progressbar" style="width: @Model.MetricItem.SocialComparision.RelationshipComparision.NonPurchasedRelationshipPercent.ToDouble().NumberFormatForCss()%"
+                                 aria-valuenow="@Model.MetricItem.SocialComparision.RelationshipComparision.NonPurchasedRelationshipPercent.ToDouble().NumberFormatForCss()" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                        <div class="text-right opacity-50">
+                            @Model.MetricItem.SocialComparision.RelationshipComparision.NonPurchasedRelationship
+                        </div>
+                    </td>
+                    <td style="width: 10%" class="text-right">
+                        @Model.MetricItem.SocialComparision.RelationshipComparision.NonPurchasedRelationshipPercent.ToPositivePercent()
+                    </td>
+                }
+                else
+                {
+                    <td style="width: 50%">
+                        @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = false, HasImage = false, IsInverse = false }, ViewData)
+                    </td>
+                }
+
+            </tr>
+            </tbody>
+        </abp-table>
+    }
+    </abp-column>
+    <abp-column class="social-comparision-icon-col">
+        <div class="d-block group-user text-right">
+            <img src="~/images/icons/group-user-red.png" alt=""/>
+        </div>
+        <p style="font-size: 17px;font-weight: bold" class="mt-3 text-right">@L["Page2.DashboardCustomerCompare.UserNoPurchase"]</p>
+    </abp-column>
+    </abp-row>
+    </abp-card-body>
+    </abp-card>
+}

@@ -1,0 +1,229 @@
+/*Custom layout*/
+.abp-empty-layout{
+    padding-top: 0 !important;
+}
+.login-page{
+    margin-top: 12%;
+}
+.login-page .icon-circle{
+    display: inline-block;
+    width: auto;
+    height: auto;
+    padding: 0 5px;
+    border-radius: 10px;
+}
+.login-page .btn{
+    padding: 8px !important;
+}
+.LookOn-btn-primary,
+.LookOn-btn-primary
+{
+    border-color: #3834EF;
+    background:  #3834EF;
+    color: white;
+}
+
+.btn-primary-custom {
+    color: white;
+    background-color: black;
+    border-color: black;
+}
+.btn-primary-custom:hover {
+    color: black;
+    background-color: white;
+}
+
+.login-page .icon-circle-primary,
+.intro-page .icon-circle-primary
+{
+    background: linear-gradient(180deg, #4779FA 0%, #3834EF 80%);
+}
+.login-page-right{
+    padding-top: 5%;
+}
+.row-no-padding{
+    padding: 0 !important;
+}
+/* Your Global Styles */
+.metric-percent {
+    float: left;
+    margin-top: 5%;
+}
+.progress{
+    background: #F3F5F8;
+}
+.progress-bar-custom{
+    
+    background-image: linear-gradient(to right, #F97179 , #DC48B3);
+}
+
+
+.table-top-products{
+    
+}
+.table-top-products > thead > tr > th{
+    border-bottom: none !important;
+}
+.display-bl{
+    display: block !important;
+}
+
+.display-inline-bl{
+    display: inline-block !important;
+}
+
+.container-form-login {
+    align-items: center;
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+    height: 100vh;
+}
+
+.img-login {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.container-img-login {
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column-reverse;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .mb-sm-1{
+        margin-bottom: 10px !important;
+    }
+    .mb-sm-2{
+        margin-bottom: 20px !important;
+    }
+    .mb-sm-3{
+        margin-bottom: 30px !important;
+    }
+    .mb-sm-4{
+        margin-bottom: 40px !important;
+    }
+    .mb-sm-5{
+        margin-bottom: 50px !important;
+    }
+    
+    .col-sm-3{
+        flex: 0 0 auto;
+        width: 25%;
+    }
+    .col-sm-4{
+        flex: 0 0 auto;
+        width: 33.33333333%;
+    }
+    .col-sm-6{
+        flex: 0 0 auto;
+        width: 50%;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .mb-md-1{
+        margin-bottom: 10px !important;
+    }
+    .mb-md-2{
+        margin-bottom: 20px !important;
+    }
+    .mb-md-3{
+        margin-bottom: 30px !important;
+    }
+    .mb-md-4{
+        margin-bottom: 40px !important;
+    }
+    .mb-md-5{
+        margin-bottom: 50px !important;
+    }
+    .mt-md-5{
+        margin-top: 50px !important;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .vertical {
+        width: 100%;
+        height: 100%;
+        display: inline-block;
+        -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
+        transform: rotate(-90deg);
+        min-width: 200px;
+    }
+
+    .vertical > .progress {
+        height: 100%;
+
+    }
+}
+
+.login-form-custom{
+    max-width: 350px; 
+    margin: auto;
+}
+.login-title-custom{
+    font-size: 30px;
+}
+.border-custom{
+    border: 2px solid #282B35;
+}
+.login-btn-custom{
+    border-radius: 30px;
+    min-height: 50px;
+    font-size: 16px;
+}
+
+@media only screen and (min-width: 768px) {
+    .login-image-custom {
+        display: flex !important;
+    }
+}
+
+@media only screen and (min-width: 0px) {
+    .login-image-custom {
+        display: none;
+    }
+}
+.background-image-login {
+    background-image: url("https://www.w3schools.com/cssref/paper.gif");
+}
+
+.lo-btn-right-icon{
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    -webkit-mask-image: url("./images/logo-index/ic_16_price_right.png");
+    -webkit-mask-position: center;
+    -webkit-mask-size: 18px 18px;
+    vertical-align: middle;
+    background-color: white;
+}
+.lo-contract-icon{
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    -webkit-mask-image: url("./images/logo-index/ic_contract.png");
+    -webkit-mask-position: center;
+    -webkit-mask-size: 18px 18px;
+    vertical-align: middle;
+    background-color: black;
+}
+
+

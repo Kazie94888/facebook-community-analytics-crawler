@@ -1,0 +1,101 @@
+﻿@page "/social-overview"
+@model LookOn.Web.Pages.SocialOverview.IndexModel
+@using LookOn.Consts
+@using Microsoft.AspNetCore.Mvc.Localization
+@using LookOn.Localization
+@using LookOn.Web.Menus
+@using LookOn.Web.Pages.Shared
+@using Newtonsoft.Json
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
+@using Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@inject IHtmlLocalizer<LookOnResource> L
+
+@inject IPageLayout PageLayout
+
+@{
+    PageLayout.Content.MenuItemName = LookOnMenus.SocialOverviewDashboard;
+}
+
+@section scripts {
+    
+        @if (Model.IsActiveSubscription || !Model.IsEndTrial)
+        {
+            if (Model.Page2Metric is not null)
+            {
+                <script>
+                     var genderTypesData = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.Page2Metric.Demographic.GenderMetrics))');
+                     var relationShipTypesData = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.Page2Metric.Demographic.RelationshipMetrics))');
+                 </script>
+            }
+            @* <script src="~/js/mapvietnamdata.js" type="text/javascript"></script> *@
+            <abp-script src="/Pages/SocialOverview/Index.js"/>
+            <abp-script src="/Pages/SocialOverview/PartialViews/Js/DashboardCustomerDetail.js"/>
+        }
+        else
+        {
+            <abp-script src="/Pages/MerchantSubscriptions/CheckSubscription.js"/> 
+        }
+}
+
+@if (Model.IsCommunityIntegration)
+{
+    @if (Model.IsCommunityVerified)
+    {
+        @await Html.PartialAsync("Shared/NotificationUpdatingPartial", new NotificationUpdatingModel { IsNotificationAccepted = Model.IsNotificationAccepted }, ViewData)
+                <abp-row class="mb-3">
+                    <abp-column class="row">
+                        <abp-column size-md="_6">
+                            <div style="font-size: 30px" class="text-left veek-support-current-font ">@L["Page2.Title"]</div>
+                            <div style="margin-bottom: 10px" class="text-left font-size-40 font-weight-700">
+                                <b>@Model.Merchant?.Name</b>
+                            </div>
+                        </abp-column>
+                    </abp-column>
+                </abp-row>
+
+        if (!Model.IsTrial)
+        {
+            if (Model.Page2Metric is not null)
+                {
+                    @await Html.PartialAsync("PartialViews/SocialOverviewDashboardPartial", Model.Page2Metric.SocialInsight, ViewData)
+                    @await Html.PartialAsync("PartialViews/SocialDashboardCustomerDetailPartial", Model.Page2Metric.Demographic, ViewData)
+                    @await Html.PartialAsync("PartialViews/SocialDashboardCustomerByCityPartial", Model.Page2Metric.LocationByProvinces, ViewData)
+                    @await Html.PartialAsync("PartialViews/SocialDashboardSocialPartial", Model.Page2Metric.CommunityInteraction, ViewData)
+                    @await Html.PartialAsync("PartialViews/DashboardCustomerComparePartial", Model.Page2Metric.SocialComparision, ViewData)
+            
+                    <abp-row class="text-center sticky-bottom">
+                        <abp-column>
+                            <a class="btn btn-outline-dark display-inline-bl" style="float: right" href="#">
+                                <i class="fas fa-2x fa-angle-up"></i>
+                            </a>
+                        </abp-column>
+                    </abp-row>
+                }
+                else
+                {
+                    @await Html.PartialAsync("Shared/DashboardNoDataPartial", new DashboardNoDataModel() {PageName = DashboardPageConsts.Page2, SyncStatus = Model.MerchantSyncStatus}, ViewData)
+                }
+        }
+        else
+        {
+            <abp-card class="notification-card">
+                <abp-card-body class="text-center card-body">
+                    <h2>@L["Trial.Header"]</h2>
+                    <div>@L["Trial.Content"]</div>
+                    <a href="https://lookon.vn/" target="_blank">lookon.vn</a>
+                </abp-card-body>
+            </abp-card>
+        }
+    }
+    else
+    {
+        @await Html.PartialAsync("Shared/CommunityNoVerifyNotification", null, ViewData)
+    }
+    
+}
+else
+{
+    @await Html.PartialAsync("Shared/CommunityIntegrationNotificationModal", new CommunityIntegrationNotificationModel {IsCommunityIntegration = false}, ViewData)
+}
+

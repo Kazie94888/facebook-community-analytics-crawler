@@ -1,0 +1,54 @@
+{
+  "Id": "d57e6b74-09da-47e2-a92b-594692c2ce3d",
+  "Name": "UserInfo",
+  "OriginalName": "UserInfo",
+  "NamePlural": "UserInfos",
+  "DatabaseTableName": "UserInfos",
+  "Namespace": "UserInfos",
+  "BaseClass": "FullAuditedEntity",
+  "PrimaryKeyType": "Guid",
+  "IsMultiTenant": false,
+  "ShouldCreateUserInterface": true,
+  "ShouldCreateBackend": true,
+  "ShouldAddMigration": true,
+  "ShouldUpdateDatabase": true,
+  "CreateTests": false,
+  "Properties": [
+    {
+      "Id": "ace7a6a4-e3d2-4b6f-abee-58a14f08aa00",
+      "Name": "IdentificationNumber",
+      "Type": "string",
+      "EnumType": "",
+      "EnumNamespace": "",
+      "EnumAngularImport": "shared/enums",
+      "IsNullable": false,
+      "IsRequired": false,
+      "MinLength": null,
+      "MaxLength": null,
+      "SortOrder": 0,
+      "SortType": 0,
+      "Regex": "",
+      "EmailValidation": false,
+      "EnumValues": null,
+      "IsSelected": true
+    }
+  ],
+  "NavigationProperties": [
+    {
+      "Namespace": "LookOn.Users",
+      "EntityName": "AppUser",
+      "EntityNameWithDuplicationNumber": "AppUser",
+      "EntitySetNameWithDuplicationNumber": "Users",
+      "EntitySetName": "Users",
+      "DtoNamespace": "LookOn.Users",
+      "DtoEntityName": "AppUserDto",
+      "Type": "Guid",
+      "Name": "AppUserId",
+      "ReferencePropertyName": "User",
+      "DisplayProperty": "UserName",
+      "UiPickType": "Modal",
+      "IsRequired": false
+    }
+  ],
+  "PhysicalFileName": "UserInfo.json"
+}

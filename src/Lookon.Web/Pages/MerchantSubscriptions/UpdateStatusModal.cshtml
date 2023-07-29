@@ -1,0 +1,26 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using LookOn.Localization
+@using LookOn.Web.Pages.MerchantSubscriptions
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@inject IHtmlLocalizer<LookOnResource> L
+@model UpdateStatusModalModel
+@{
+    Layout = null;
+}
+<div class="customer-modal-center">
+    <form data-ajaxForm="true" asp-page="/MerchantSubscriptions/UpdateStatusModal" autocomplete="off">
+        <abp-modal>
+            <abp-modal-header title="@L["Update"].Value"></abp-modal-header>
+
+            <abp-modal-body>
+                <abp-input asp-for="Id"/>
+                <input hidden value="@(Model.MerchantSubscription.MerchantId == default ? "" : Model.MerchantSubscription.MerchantId.ToString())" id="Merchant_Id" name="MerchantSubscription.MerchantId"/>
+                                    
+                <abp-select asp-for="MerchantSubscription.SubscriptionStatus"/>
+            </abp-modal-body>
+
+            <abp-modal-footer buttons="@(AbpModalButtons.Cancel | AbpModalButtons.Save)"></abp-modal-footer>
+        </abp-modal>
+    </form>
+</div>

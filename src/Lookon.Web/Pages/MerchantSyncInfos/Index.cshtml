@@ -1,0 +1,67 @@
+@page
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using LookOn.Permissions
+@using LookOn.Web.Pages.MerchantSyncInfos
+@using LookOn.Web.Menus
+@using Microsoft.AspNetCore.Mvc.Localization
+@using LookOn.Localization
+@inject IHtmlLocalizer<LookOnResource> L
+@inject IAuthorizationService Authorization
+@model IndexModel
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = L["MerchantSyncInfos"].Value;
+    PageLayout.Content.MenuItemName = LookOnMenus.MerchantSyncInfos;
+}
+
+@section scripts
+{
+    <abp-script src="/Pages/MerchantSyncInfos/index.js"/>
+}
+
+<abp-card>
+    <abp-card-body>
+        <abp-row class="mb-3">
+            <abp-column size-md="_12">
+                <form id="SearchForm" autocomplete="off">
+                    <div class="input-group">
+                        <input class="form-control page-search-filter-text" id="FilterText" placeholder="@L["Search"]"/>
+                        <abp-button button-type="Primary" type="submit" icon="search"/>
+                    </div>
+                </form>
+            </abp-column>
+            <abp-column size-md="_12" class="mt-3">
+                <a href="javascript:;" id="AdvancedFilterSectionToggler" class="text-decoration-none">@L["SeeAdvancedFilters"]</a>
+            </abp-column>
+        </abp-row>
+
+        <abp-row id="AdvancedFilterSection" style="display: none;">
+            <abp-column size="_3">
+                <label for="Merchant_Name">@L["Merchant"]</label>
+                <div class="input-group mb-3 mt-2">
+                    <input hidden id="MerchantIdFilter"/>
+                    <input type="text" id="Merchant_Name" class="form-control" disabled>
+                    <abp-button button-type="Info" id="MerchantFilterLookupOpenButton" class="text-light">@L["Pick"]</abp-button>
+                    <abp-button button-type="Danger" class="lookupCleanButton ms-1">
+                        <i class="fa fa-times"></i>
+                    </abp-button>
+                </div>
+            </abp-column>
+        </abp-row>
+
+        <abp-table striped-rows="true" id="MerchantSyncInfosTable">
+            <thead>
+            <tr>
+                <th>@L["Actions"]</th>
+                <th>@L["Merchant"]</th>
+                <th>@L["Page1SyncStatus"]</th>
+                <th>@L["Page2SyncStatus"]</th>
+                <th>@L["Page3SyncStatus"]</th>
+                <th>@L["RawOrderSyncStatus"]</th>
+                <th>@L["CleanOrderSyncStatus"]</th>
+            </tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>

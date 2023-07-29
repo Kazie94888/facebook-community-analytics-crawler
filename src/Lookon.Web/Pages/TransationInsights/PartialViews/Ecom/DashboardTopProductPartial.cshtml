@@ -1,0 +1,74 @@
+﻿@using System.Collections.ObjectModel
+@using LookOn.Consts
+@using LookOn.Core.Extensions
+@using LookOn.Localization
+@using LookOn.Web.Pages.Shared
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ProgressBar
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Table
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tooltip
+@model IList<LookOn.Dashboards.DashboardBase.EcomMetric_RevenueByProductDto>
+@inject IHtmlLocalizer<LookOnResource> L
+
+<abp-card class="height-95-pc">
+    <abp-card-body>
+        <abp-row>
+            <abp-column size-md="_11" size-sm="_10">
+                <div class="display-inline-bl font-size-30">@L["Page1.DashboardTopProduct.Title"]</div>
+            </abp-column>
+            <abp-column size-md="_1" size-sm="_2">
+                <abp-button class="display-inline-bl float-end shadow-none question-tooltip-margin" abp-tooltip-left="@L["Page1.DashboardTopProduct.Hint"].Value">
+                    <span class="lo-help-icon"></span>
+                </abp-button>
+            </abp-column>
+            <abp-column size-md="_12" size-sm="_12">
+                <abp-table border-style="Borderless" striped-rows="false" class="table-top-border-none table-layout-fixed table-sm">
+                    @* <thead> *@
+                    @* <tr> *@
+                    @*     <th scope="Column">#</th> *@
+                    @*     <th scope="Column">@L["Page1.DashboardTopProduct.Name"]</th> *@
+                    @*     <th scope="Column">@L["Page1.DashboardTopProduct.Popularity"]</th> *@
+                    @*     <th scope="Column">@L["Page1.DashboardTopProduct.Sales"]</th> *@
+                    @* </tr> *@
+                    @* </thead> *@
+                    <tbody>
+                    @if (Model.IsNotNullOrEmpty())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-ellipsis">
+                                    <strong>#@(Model.IndexOf(item) + 1)</strong>&ensp;
+                                    <span class="top-product-name cursor-pointer" data-toggle="tooltip" title="@item.ProductName">
+                                        @item.ProductName
+                                    </span>
+                                </td>
+                                <td class="text-align-right">
+                                    @item.Percent.ToPositivePercent()
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <abp-progress-bar value="@item.Percent.ToDouble()" class="LookOn-progress-bar-color-0"/>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2">
+                                @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = true }, ViewData)
+                            </td>
+                        </tr>
+                    }
+
+                    </tbody>
+                </abp-table>
+            </abp-column>
+        </abp-row>
+    </abp-card-body>
+</abp-card>

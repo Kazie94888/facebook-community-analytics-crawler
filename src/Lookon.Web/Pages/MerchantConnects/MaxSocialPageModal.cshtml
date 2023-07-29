@@ -1,0 +1,26 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using LookOn.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@inject IHtmlLocalizer<LookOnResource> L
+@{
+    Layout = null;
+}
+
+<abp-modal centered="true">
+    <abp-modal-header title="@L["ConnectCommunityPage"].Value"></abp-modal-header>
+
+    <abp-modal-body>
+        <p style="font-size: 16px">
+            @L["ConnectCommunity.WarningMessage.MaxSocialPage"]
+        </p>
+    </abp-modal-body>
+    <abp-modal-footer>
+        <a href="#" id="btnCancelUpgradeSubscription" abp-button="Primary" title="@L["Cancel"]" class="box btn btn-border-radius-20 btn-dark btn-lg">
+            @L["Cancel"]
+        </a>
+        <a href="#" id="btnUpgradeSubscription" abp-button="Primary" title="@L["Subscription.Admin.UpgradeSubscription"]" class="box btn btn-border-radius-20 btn-dark btn-lg">
+            @L["Subscription.Admin.UpgradeSubscription"]
+        </a>
+    </abp-modal-footer>
+</abp-modal>

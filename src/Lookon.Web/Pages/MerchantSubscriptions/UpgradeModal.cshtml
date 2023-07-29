@@ -1,0 +1,34 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using LookOn.Localization
+@using LookOn.Web.Pages.MerchantSubscriptions
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@inject IHtmlLocalizer<LookOnResource> L
+@model UpgradeModalModel
+@{
+    Layout = null;
+}
+<div class="customer-modal-center">
+    <form data-ajaxForm="true" asp-page="/MerchantSubscriptions/UpgradeModal" autocomplete="off">
+        <abp-modal>
+            <abp-modal-header title="@L["Upgrade"].Value"></abp-modal-header>
+
+            <abp-modal-body>
+                <abp-input asp-for="Id"/>
+
+                <abp-input asp-for="MerchantSubscription.StartDateTime" value="@(Model.MerchantSubscription.EndDateTime?.ToString("yyyy-MM-dd"))" type="date"/>
+
+                <abp-select asp-for="MerchantSubscription.SubscriptionType"/>
+
+                <label for="Merchant_Name">@L["Merchant"] *</label>
+                <div class="input-group mb-3">
+                    <input hidden value="@(Model.MerchantSubscription.MerchantId == default ? "" : Model.MerchantSubscription.MerchantId.ToString())" id="Merchant_Id" name="MerchantSubscription.MerchantId"/>
+                    <input type="text" id="Merchant_Name" class="form-control" value="@Model.Merchant?.Name" disabled>
+                </div>
+
+            </abp-modal-body>
+
+            <abp-modal-footer buttons="@(AbpModalButtons.Cancel | AbpModalButtons.Save)"></abp-modal-footer>
+        </abp-modal>
+    </form>
+</div>

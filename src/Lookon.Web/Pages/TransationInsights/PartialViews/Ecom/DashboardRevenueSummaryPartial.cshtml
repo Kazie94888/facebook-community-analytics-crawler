@@ -1,0 +1,81 @@
+﻿@using LookOn.Core.Consts
+@using LookOn.Core.Extensions
+@using LookOn.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Newtonsoft.Json
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
+@model LookOn.Dashboards.DashboardBase.EcomMetric_RevenueSummaryDto
+@inject IHtmlLocalizer<LookOnResource> L
+
+@section partialjs{
+<script>
+    var revenueByDates = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.RevenueByDates.OrderBy(_ => _.DateTime)))');
+</script>   
+}
+
+<abp-card>
+    <abp-card-body>
+        <abp-row>
+            <abp-column size-md="_11">
+                <div class="display-inline-bl font-size-30">@L[$"Page1.DashboardTotalRevenue.{ViewData["TimeTitle"]}Title"]</div>
+            </abp-column>
+            <abp-column size-md="_1">
+                <abp-button class="display-inline-bl float-end shadow-none question-tooltip-margin question-tooltip-margin" abp-tooltip-left="@L[$"Page1.DashboardTotalRevenue.{ViewData["TimeTitle"]}Title"].Value">
+                    <span class="lo-help-icon"></span>
+                </abp-button>
+            </abp-column>
+            <abp-column size="_9">
+                <div id="barChartContainer"></div>
+            </abp-column>
+            <abp-column size="_3">
+                <abp-card class="justify-content-center box-chart-center">
+                    <abp-card-body>
+                        <abp-table border-style="Borderless" striped-rows="false" class="table-box-center">
+                            <tbody>
+                            <tr>
+                                <td style="border-top: none !important">
+                                   @if (Model.RevenueToday != 0)
+                                   {
+                                       <div class="display-bl text-center">
+                                           <h1>@Model.RevenueToday.ToCommaStyle().ToVND()</h1>
+                                       </div>
+                                       <div class="display-bl text-center">
+                                           <b class="display-bl text-center @Model.RevenueToday.GetColorClass()">
+                                               <i class="@Model.RevenueTodayGrowthPercent.GetArrowClass()"></i> @Model.RevenueTodayGrowthPercent.FormatNumber().ToPositivePercent()
+                                           </b>
+                                       </div>
+                                       <div class="text-center veek-support-current-font">
+                                           @L["Page1.DashboardTotalRevenue.RevenueToday"]
+                                       </div>
+                                   }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @if (Model.Revenue != 0)
+                                    {
+                                        <div class="display-bl text-center">
+                                            <h1>@Model.Revenue.ToCommaStyle().ToVND()</h1>
+                                        </div>
+                                        <div class="display-bl text-center">
+                                            <b class="display-bl text-center @Model.RevenueGrowthRate.GetColorClass()">
+                                                <i class="@Model.RevenueGrowthRate.GetArrowClass()"></i> @Model.RevenueGrowthRate.FormatNumber().ToPositivePercent()
+                                            </b>
+                                        </div>
+                                        <div class="text-center veek-support-current-font ">
+                                            @L[$"Page1.DashboardTotalRevenue.Revenue{ViewData["TimeTitle"]}"]
+                                        </div>
+                                    }
+                                </td>
+                            </tr>
+                            </tbody>
+                        </abp-table>
+                    </abp-card-body>
+                </abp-card>
+
+            </abp-column>
+        </abp-row>
+    </abp-card-body>
+</abp-card>

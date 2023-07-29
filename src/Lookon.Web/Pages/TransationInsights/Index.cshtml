@@ -1,0 +1,162 @@
+﻿@page "/transaction-insights/timeframe={timeFrameTypeString}"
+@model LookOn.Web.Pages.TransationInsights.IndexModel
+@using Humanizer
+@using LookOn.Consts
+@using LookOn.Core.Extensions
+@using LookOn.Core.Shared.Enums
+@using LookOn.Dashboards.DashboardBase
+@using Microsoft.AspNetCore.Mvc.Localization
+@using LookOn.Localization
+@using LookOn.Web.Menus
+@using LookOn.Web.Pages.Shared
+@using Newtonsoft.Json
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
+@using Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@inject IHtmlLocalizer<LookOnResource> L
+
+@inject IPageLayout PageLayout
+
+@{
+    PageLayout.Content.MenuItemName = LookOnMenus.MerchantDashboard;
+}
+
+@section scripts {
+
+    @* <script src="~/js/mapvietnamdata.js" type="text/javascript"></script> *@
+    @if (Model.IsActiveSubscription || !Model.IsEndTrial)
+    {
+        if (Model.Page1Metric is not null)
+        {
+            if (Model.Page1Metric.Ecom.RevenueSummary is not null)
+            {
+                <script>
+                    var revenueByDates = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.Page1Metric.Ecom.RevenueSummary.RevenueByDates.Where(x => x.DateTime.Date != DateTime.Now.Date).OrderBy(_ => _.DateTime)))');
+                </script>
+            }
+            <script>
+                var genderTypesData = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.Page1Metric.Social.Demographic.GenderMetrics))');
+                var relationShipTypesData = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.Page1Metric.Social.Demographic.RelationshipMetrics))');
+            </script>
+        }
+        <abp-script src="/Pages/TransationInsights/Index.js"/>
+        <abp-script src="/Pages/TransationInsights/PartialViews/Ecom/Js/DashboardTotalRevenue.js"/>
+        <abp-script src="/Pages/TransationInsights/PartialViews/Socials/Js/DashboardCustomerDetail.js"/>
+        <abp-script src="/Pages/TransationInsights/PartialViews/Ecom/Js/DashboardTopProduct.js"/>
+    }
+    else
+    {
+        <abp-script src="/Pages/MerchantSubscriptions/CheckSubscription.js"/>
+    }
+
+
+
+}
+
+@section styles {
+    <abp-style src="/Pages/TransationInsights/Index.css"/>
+}
+
+@if (Model.IsCommunityIntegration)
+{
+    @if (Model.IsCommunityVerified)
+    {
+        @await Html.PartialAsync("Shared/NotificationUpdatingPartial", new NotificationUpdatingModel { IsNotificationAccepted = Model.IsNotificationAccepted }, ViewData)
+        if (Model.IsMasterAdmin)
+        {
+            <abp-row class="mb-3">
+                <abp-column>
+                    <abp-dropdown>
+                        <abp-dropdown-button text="@Model.MerchantName"/>
+                        <abp-dropdown-menu>
+                            @foreach (var item in Model.Merchants)
+                            {
+                                <abp-dropdown-item href="timeframe=@(Model.TimeFrameType.GetName())?merchantemail=@item.Email">
+                                    @item.Name
+                                </abp-dropdown-item>
+                            }
+                        </abp-dropdown-menu>
+                    </abp-dropdown>
+                </abp-column>
+            </abp-row>
+        }
+        <abp-row class="mb-3">
+            <abp-column size-md="_6">
+                <div style="font-size: 30px" class="text-left veek-support-current-font ">@L["Page1.Title"]</div>
+                <div style="margin-bottom: 10px" class="text-left font-size-40 font-weight-700">
+                    <b>@Model.Merchant?.Name</b>
+                </div>
+            </abp-column>
+
+            <abp-column size-md="_6" class="text-end padding-right-13">
+                <a class=" btn @(Model.TimeFrameType == TimeFrameType.Weekly ? "btn-dark" : "btn-outline-dark") btn-border-radius-20" href="~/transaction-insights/timeframe=@(TimeFrameType.Weekly.GetName())">@L[$"TimeFrameType:{TimeFrameType.Weekly.To<int>()}"].Value</a>
+                <a class=" btn @(Model.TimeFrameType == TimeFrameType.Monthly ? "btn-dark" : "btn-outline-dark") btn-border-radius-20" href="~/transaction-insights/timeframe=@(TimeFrameType.Monthly.GetName())">@L[$"TimeFrameType:{TimeFrameType.Monthly.To<int>()}"].Value</a>
+                <h5 class="mt-2 veek-support-current-font ">@($"{@Model.FromDay} - {@DateTime.UtcNow.Date:dd/MM}")</h5>
+                @if (Model.Page1Metric?.UpdatedAt != null)
+                {
+                    <span class="mt-2 veek-support-current-font ">(@L["Page1.DataUpdateAt", $"{Model.Page1Metric.UpdatedAt.Value.Humanize()}"])</span>
+                }
+            </abp-column>
+        </abp-row>
+        if (!Model.IsTrial)
+        {
+            if (Model.IsActiveSubscription)
+            {
+                if (Model.Page1Metric is not null)
+                {
+                @* @await Component.InvokeAsync(typeof(DashboardTopSummaryViewComponent), new { merchantId = Model.Merchant?.Id, timeFrameType = Model.TimeFrameType }) *@
+            @* @await Component.InvokeAsync(typeof(DashboardTotalRevenueViewComponent), new { merchantId = Model.Merchant?.Id, timeFrameType = Model.TimeFrameType }) *@
+
+                    @await Html.PartialAsync("PartialViews/Ecom/DashboardTopSummaryPartial", Model.Page1Metric.Ecom.Summary, ViewData)
+                    @await Html.PartialAsync("PartialViews/Ecom/DashboardTotalRevenuePartial", Model.Page1Metric.Ecom.RevenueSummary, ViewData)
+                    <abp-row>
+                        <abp-column size-xl="_6" size-md="_12">
+                            @* @await Component.InvokeAsync(typeof(DashboardTopProductViewComponent), new { merchantId = Model.Merchant?.Id, timeFrameType = Model.TimeFrameType }) *@
+
+                            @await Html.PartialAsync("PartialViews/Ecom/DashboardTopProductPartial", Model.Page1Metric.Ecom.RevenueByProducts, ViewData)
+                        </abp-column>
+                        <abp-column size-xl="_6" size-md="_12">
+                            @* @await Component.InvokeAsync(typeof(DashboardTotalRevenueByLocationViewComponent), new { merchantId = Model.Merchant?.Id, timeFrameType = Model.TimeFrameType }) *@
+                            @await Html.PartialAsync("PartialViews/Ecom/DashboardTopRevenueByLocationPartial", Model.Page1Metric.Ecom.RevenueByLocations, ViewData)
+                        </abp-column>
+                    </abp-row>
+
+            @* @await Component.InvokeAsync(typeof(DashboardCustomerDetailViewComponent), new { merchantId = Model.Merchant?.Id, timeFrameType = Model.TimeFrameType, communityPageIds = Model.Merchant?.SocialCommunitiesIds }) *@
+            @* @await Component.InvokeAsync(typeof(DashboardCustomerByCityViewComponent), new { communityPageIds = Model.Merchant?.SocialCommunitiesIds }) *@
+            @* @await Component.InvokeAsync(typeof(DashboardSocialViewComponent), new { communityPageIds = Model.Merchant?.SocialCommunitiesIds }) *@
+            @* @await Component.InvokeAsync(typeof(DashboardOtherCustomerViewComponent), new { merchantId = Model.Merchant?.Id, communityPageIds = Model.Merchant?.SocialCommunitiesIds }) *@
+
+                    @await Html.PartialAsync("PartialViews/Socials/DashboardCustomerDetailPartial", Model.Page1Metric, ViewData)
+                    @await Html.PartialAsync("PartialViews/Socials/DashboardCustomerByCityPartial", Model.Page1Metric.Social.LocationByProvinces, ViewData)
+                    @await Html.PartialAsync("PartialViews/Socials/DashboardSocialPartial", Model.Page1Metric.Social.CommunityInteraction, ViewData)
+                    @await Html.PartialAsync("PartialViews/Socials/DashboardOtherCustomerPartial", Model.Page1Metric.Advanced, ViewData)
+                    <abp-row class="text-center sticky-bottom">
+                        <abp-column>
+                            <a class="btn btn-outline-dark display-inline-bl" style="float: right" href="#">
+                                <i class="fas fa-2x fa-angle-up"></i>
+                            </a>
+                        </abp-column>
+                    </abp-row>
+                }
+                else
+                {
+                    @await Html.PartialAsync("Shared/DashboardNoDataPartial", new DashboardNoDataModel() { PageName = DashboardPageConsts.Page1, SyncStatus = Model.MerchantSyncStatus }, ViewData)
+                }
+            }
+        }
+        else
+        {
+            @await Html.PartialAsync("PartialViews/DashboardTrial", ViewData)
+        }
+    }
+    else
+    {
+        @await Html.PartialAsync("Shared/CommunityNoVerifyNotification", null, ViewData)
+    }
+}
+else
+{
+    @await Html.PartialAsync("Shared/CommunityIntegrationNotificationModal", new CommunityIntegrationNotificationModel { IsCommunityIntegration = false }, ViewData)
+}

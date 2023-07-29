@@ -1,0 +1,709 @@
+.veek-common-color-1-background {
+  background-color: #eaeaeb;
+}
+
+.veek-common-color-1-font {
+  color: #eaeaeb;
+}
+
+.veek-common-color-1-border {
+  border-color: #eaeaeb;
+}
+
+.veek-common-color-2-background {
+  background-color: #cbcccf;
+}
+
+.veek-common-color-2-font {
+  color: #cbcccf;
+}
+
+.veek-common-color-2-border {
+  border-color: #cbcccf;
+}
+
+.veek-common-color-3-background {
+  background-color: #a3a4a8;
+}
+
+.veek-common-color-3-font {
+  color: #a3a4a8;
+}
+
+.veek-common-color-3-border {
+  border-color: #a3a4a8;
+}
+
+.veek-common-color-4-background {
+  background-color: #787980;
+}
+
+.veek-common-color-4-font {
+  color: #787980;
+}
+
+.veek-common-color-4-border {
+  border-color: #787980;
+}
+
+.veek-common-color-5-background {
+  background-color: #4f5159;
+}
+
+.veek-common-color-5-font {
+  color: #4f5159;
+}
+
+.veek-common-color-5-border {
+  border-color: #4f5159;
+}
+
+.veek-common-color-6-background {
+  background-color: #282b35;
+}
+
+.veek-common-color-6-font {
+  color: #282b35;
+}
+
+.veek-common-color-6-border {
+  border-color: #282b35;
+}
+
+.veek-common-color-7-background {
+  background-color: #22252d;
+}
+
+.veek-common-color-7-font {
+  color: #22252d;
+}
+
+.veek-common-color-7-border {
+  border-color: #22252d;
+}
+
+.veek-common-color-8-background {
+  background-color: #1c1f26;
+}
+
+.veek-common-color-8-font {
+  color: #1c1f26;
+}
+
+.veek-common-color-8-border {
+  border-color: #1c1f26;
+}
+
+.veek-common-color-9-background {
+  background-color: #17191e;
+}
+
+.veek-common-color-9-font {
+  color: #17191e;
+}
+
+.veek-common-color-9-border {
+  border-color: #17191e;
+}
+
+.veek-common-color-10-background {
+  background-color: #121318;
+}
+
+.veek-common-color-10-font {
+  color: #121318;
+}
+
+.veek-common-color-10-border {
+  border-color: #121318;
+}
+
+.veek-support-color-1-background {
+  background-color: #f5f7f9;
+}
+
+.veek-support-color-1-font {
+  color: #f5f7f9;
+}
+
+.veek-support-color-1-border {
+  border-color: #f5f7f9;
+}
+
+.veek-support-color-2-background {
+  background-color: #e7ebf2;
+}
+
+.veek-support-color-2-font {
+  color: #e7ebf2;
+}
+
+.veek-support-color-2-border {
+  border-color: #e7ebf2;
+}
+
+.veek-support-color-3-background {
+  background-color: #d4dbe7;
+}
+
+.veek-support-color-3-font {
+  color: #d4dbe7;
+}
+
+.veek-support-color-3-border {
+  border-color: #d4dbe7;
+}
+
+.veek-support-color-4-background {
+  background-color: #c0cadc;
+}
+
+.veek-support-color-4-font {
+  color: #c0cadc;
+}
+
+.veek-support-color-4-border {
+  border-color: #c0cadc;
+}
+
+.veek-support-color-5-background {
+  background-color: #adbad1;
+}
+
+.veek-support-color-5-font {
+  color: #adbad1;
+}
+
+.veek-support-color-5-border {
+  border-color: #adbad1;
+}
+
+.veek-support-color-6-background {
+  background-color: #9babc7;
+}
+
+.veek-support-color-6-font {
+  color: #9babc7;
+}
+
+.veek-support-color-6-border {
+  border-color: #9babc7;
+}
+
+.veek-support-color-7-background {
+  background-color: #8491a9;
+}
+
+.veek-support-color-7-font {
+  color: #8491a9;
+}
+
+.veek-support-color-7-border {
+  border-color: #8491a9;
+}
+
+.veek-support-color-8-background {
+  background-color: #6e798d;
+}
+
+.veek-support-color-8-font {
+  color: #6e798d;
+}
+
+.veek-support-color-8-border {
+  border-color: #6e798d;
+}
+
+.veek-support-color-9-background {
+  background-color: #586171;
+}
+
+.veek-support-color-9-font {
+  color: #586171;
+}
+
+.veek-support-color-9-border {
+  border-color: #586171;
+}
+
+.veek-support-color-10-background {
+  background-color: #464d5a;
+}
+
+.veek-support-color-10-font {
+  color: #464d5a;
+}
+
+.veek-support-color-10-border {
+  border-color: #464d5a;
+}
+
+.veek-negative-color-1-background {
+  background-color: #fcedef;
+}
+
+.veek-negative-color-1-font {
+  color: #fcedef;
+}
+
+.veek-negative-color-1-border {
+  border-color: #fcedef;
+}
+
+.veek-negative-color-2-background {
+  background-color: #f7d3d8;
+}
+
+.veek-negative-color-2-font {
+  color: #f7d3d8;
+}
+
+.veek-negative-color-2-border {
+  border-color: #f7d3d8;
+}
+
+.veek-negative-color-3-background {
+  background-color: #f0afb8;
+}
+
+.veek-negative-color-3-font {
+  color: #f0afb8;
+}
+
+.veek-negative-color-3-border {
+  border-color: #f0afb8;
+}
+
+.veek-negative-color-4-background {
+  background-color: #ea8a98;
+}
+
+.veek-negative-color-4-font {
+  color: #ea8a98;
+}
+
+.veek-negative-color-4-border {
+  border-color: #ea8a98;
+}
+
+.veek-negative-color-5-background {
+  background-color: #e36779;
+}
+
+.veek-negative-color-5-font {
+  color: #e36779;
+}
+
+.veek-negative-color-5-border {
+  border-color: #e36779;
+}
+
+.veek-negative-color-6-background {
+  background-color: #dd465b;
+}
+
+.veek-negative-color-6-font {
+  color: #dd465b;
+}
+
+.veek-negative-color-6-border {
+  border-color: #dd465b;
+}
+
+.veek-negative-color-7-background {
+  background-color: #bc3c4d;
+}
+
+.veek-negative-color-7-font {
+  color: #bc3c4d;
+}
+
+.veek-negative-color-7-border {
+  border-color: #bc3c4d;
+}
+
+.veek-negative-color-8-background {
+  background-color: #9d3241;
+}
+
+.veek-negative-color-8-font {
+  color: #9d3241;
+}
+
+.veek-negative-color-8-border {
+  border-color: #9d3241;
+}
+
+.veek-negative-color-9-background {
+  background-color: #7e2834;
+}
+
+.veek-negative-color-9-font {
+  color: #7e2834;
+}
+
+.veek-negative-color-9-border {
+  border-color: #7e2834;
+}
+
+.veek-negative-color-10-background {
+  background-color: #631f29;
+}
+
+.veek-negative-color-10-font {
+  color: #631f29;
+}
+
+.veek-negative-color-10-border {
+  border-color: #631f29;
+}
+
+.veek-warning-color-1-background {
+  background-color: #fbf8ec;
+}
+
+.veek-warning-color-1-font {
+  color: #fbf8ec;
+}
+
+.veek-warning-color-1-border {
+  border-color: #fbf8ec;
+}
+
+.veek-warning-color-2-background {
+  background-color: #f6eed1;
+}
+
+.veek-warning-color-2-font {
+  color: #f6eed1;
+}
+
+.veek-warning-color-2-border {
+  border-color: #f6eed1;
+}
+
+.veek-warning-color-3-background {
+  background-color: #f0e1ac;
+}
+
+.veek-warning-color-3-font {
+  color: #f0e1ac;
+}
+
+.veek-warning-color-3-border {
+  border-color: #f0e1ac;
+}
+
+.veek-warning-color-4-background {
+  background-color: #e8d386;
+}
+
+.veek-warning-color-4-font {
+  color: #e8d386;
+}
+
+.veek-warning-color-4-border {
+  border-color: #e8d386;
+}
+
+.veek-warning-color-5-background {
+  background-color: #e1c662;
+}
+
+.veek-warning-color-5-font {
+  color: #e1c662;
+}
+
+.veek-warning-color-5-border {
+  border-color: #e1c662;
+}
+
+.veek-warning-color-6-background {
+  background-color: #dbb93f;
+}
+
+.veek-warning-color-6-font {
+  color: #dbb93f;
+}
+
+.veek-warning-color-6-border {
+  border-color: #dbb93f;
+}
+
+.veek-warning-color-7-background {
+  background-color: #ba9d36;
+}
+
+.veek-warning-color-7-font {
+  color: #ba9d36;
+}
+
+.veek-warning-color-7-border {
+  border-color: #ba9d36;
+}
+
+.veek-warning-color-8-background {
+  background-color: #9b832d;
+}
+
+.veek-warning-color-8-font {
+  color: #9b832d;
+}
+
+.veek-warning-color-8-border {
+  border-color: #9b832d;
+}
+
+.veek-warning-color-9-background {
+  background-color: #7d6924;
+}
+
+.veek-warning-color-9-font {
+  color: #7d6924;
+}
+
+.veek-warning-color-9-border {
+  border-color: #7d6924;
+}
+
+.veek-warning-color-10-background {
+  background-color: #63531c;
+}
+
+.veek-warning-color-10-font {
+  color: #63531c;
+}
+
+.veek-warning-color-10-border {
+  border-color: #63531c;
+}
+
+.veek-positive-color-1-background {
+  background-color: #f4faed;
+}
+
+.veek-positive-color-1-font {
+  color: #f4faed;
+}
+
+.veek-positive-color-1-border {
+  border-color: #f4faed;
+}
+
+.veek-positive-color-2-background {
+  background-color: #e5f3d3;
+}
+
+.veek-positive-color-2-font {
+  color: #e5f3d3;
+}
+
+.veek-positive-color-2-border {
+  border-color: #e5f3d3;
+}
+
+.veek-positive-color-3-background {
+  background-color: #d0e9b0;
+}
+
+.veek-positive-color-3-font {
+  color: #d0e9b0;
+}
+
+.veek-positive-color-3-border {
+  border-color: #d0e9b0;
+}
+
+.veek-positive-color-4-background {
+  background-color: #badf8b;
+}
+
+.veek-positive-color-4-font {
+  color: #badf8b;
+}
+
+.veek-positive-color-4-border {
+  border-color: #badf8b;
+}
+
+.veek-positive-color-5-background {
+  background-color: #a5d568;
+}
+
+.veek-positive-color-5-font {
+  color: #a5d568;
+}
+
+.veek-positive-color-5-border {
+  border-color: #a5d568;
+}
+
+.veek-positive-color-6-background {
+  background-color: #91cc47;
+}
+
+.veek-positive-color-6-font {
+  color: #91cc47;
+}
+
+.veek-positive-color-6-border {
+  border-color: #91cc47;
+}
+
+.veek-positive-color-7-background {
+  background-color: #7bad3c;
+}
+
+.veek-positive-color-7-font {
+  color: #7bad3c;
+}
+
+.veek-positive-color-7-border {
+  border-color: #7bad3c;
+}
+
+.veek-positive-color-8-background {
+  background-color: #679132;
+}
+
+.veek-positive-color-8-font {
+  color: #679132;
+}
+
+.veek-positive-color-8-border {
+  border-color: #679132;
+}
+
+.veek-positive-color-9-background {
+  background-color: #537428;
+}
+
+.veek-positive-color-9-font {
+  color: #537428;
+}
+
+.veek-positive-color-9-border {
+  border-color: #537428;
+}
+
+.veek-positive-color-10-background {
+  background-color: #415c20;
+}
+
+.veek-positive-color-10-font {
+  color: #415c20;
+}
+
+.veek-positive-color-10-border {
+  border-color: #415c20;
+}
+
+.veek-lookon-primary-color-1-background {
+  background-color: #4779fa;
+}
+
+.veek-lookon-primary-color-1-font {
+  color: #4779fa;
+}
+
+.veek-lookon-primary-color-1-border {
+  border-color: #4779fa;
+}
+
+.veek-lookon-primary-color-2-background {
+  background-color: #3834EF;
+}
+
+.veek-lookon-primary-color-2-font {
+  color: #3834EF;
+}
+
+.veek-lookon-primary-color-2-border {
+  border-color: #3834EF;
+}
+
+.veek-white-color-background {
+  background-color: #ffffff;
+}
+
+.veek-white-color-font {
+  color: #ffffff;
+}
+
+.veek-white-color-border {
+  border-color: #ffffff;
+}
+
+.veek-black-color-background {
+  background-color: #000000;
+}
+
+.veek-black-color-font {
+  color: #000000;
+}
+
+.veek-black-color-border {
+  border-color: #000000;
+}
+
+.veek-common-current-background {
+  background-color: #22252d;
+}
+
+.veek-common-current-font {
+  color: #22252d;
+}
+
+.veek-common-current-border {
+  border-color: #22252d;
+}
+
+.veek-support-current-background {
+  background-color: #8491a9;
+}
+
+.veek-support-current-font {
+  color: #8491a9;
+}
+
+.veek-support-current-border {
+  border-color: #8491a9;
+}
+
+.veek-negative-current-background {
+  background-color: #bc3c4d;
+}
+
+.veek-negative-current-font {
+  color: #DD465B;
+}
+
+.veek-negative-current-border {
+  border-color: #bc3c4d;
+}
+
+.veek-warning-current-background {
+  background-color: #ba9d36;
+}
+
+.veek-warning-current-font {
+  color: #ba9d36;
+}
+
+.veek-warning-current-border {
+  border-color: #ba9d36;
+}
+
+.veek-positive-current-background {
+  background-color: #7bad3c;
+}
+
+.veek-positive-current-font {
+  color: #91CC47;
+}
+
+.veek-positive-current-border {
+  border-color: #7bad3c;
+}
+
+/*# sourceMappingURL=veek.css.map */

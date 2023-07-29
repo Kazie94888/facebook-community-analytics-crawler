@@ -1,0 +1,41 @@
+﻿@page
+@using LookOn.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Newtonsoft.Json
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model LookOn.Web.Pages.Shared.FeedbackModel
+@inject IHtmlLocalizer<LookOnResource> L
+
+@{
+    Layout = null;
+}
+<script>
+            var feedbackScore = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(@Model.Score))');
+</script>
+<script type="text/javascript" src="~/Pages/Shared/feedbackReview.js"></script>
+<div id="feedback-review">
+    <abp-modal centered="true" size="Large">
+        <abp-modal-body style="padding-left: 6%; padding-right: 6%; border-radius: 20px">
+            <div class="mt-4" style="font-size: 30px; font-weight: bold">
+                @L["Feedback.Review.Title"]
+            </div>
+            <div class="mt-4">
+                <button class="btn btn-outline-dark btn-border-radius-20 mt-3 btn-feedback-review" value="1">@L["Feedback.Review.Option:1"]</button>
+                <button class="btn btn-outline-dark btn-border-radius-20 mt-3 btn-feedback-review" value="2">@L["Feedback.Review.Option:2"]</button>
+                <button class="btn btn-outline-dark btn-border-radius-20 mt-3 btn-feedback-review" value="3">@L["Feedback.Review.Option:3"]</button>
+                <button class="btn btn-outline-dark btn-border-radius-20 mt-3 btn-feedback-review" value="4">@L["Feedback.Review.Option:4"]</button>
+                <button class="btn btn-outline-dark btn-border-radius-20 mt-3 btn-feedback-review" value="5">@L["Feedback.Review.Option:5"]</button>
+                <button class="btn btn-outline-dark btn-border-radius-20 mt-3 btn-feedback-review" value="6">@L["Feedback.Review.Option:6"]</button>
+                <button class="btn btn-outline-dark btn-border-radius-20 mt-3 btn-feedback-review" value="0">@L["Feedback.Review.Option:0"]</button>
+            </div>
+            <div class="mt-4">
+                <label class="mb-1" for="Feedback_Content" style="font-size: 14px"> @L["Feedback.Review.Share"]</label>
+                <textarea id="Feedback_Content" name="Model.Description" class="form-control" style="height: 150px; border-radius: 16px" placeholder="@L["Feedback.Review.Placeholder"].Value"></textarea>
+                <span class="text-danger field-validation-valid" data-valmsg-for="Model.Description" data-valmsg-replace="true"></span>
+            </div>
+        </abp-modal-body>
+        <div class="modal-footer mb-3" style="padding-left: 6%; padding-right: 6%; border-radius: 20px">
+            <button id="feedbackReviewButton" type="button" class="btn btn-dark btn-hover-color-14 btn-border-radius-20" style="min-width: 100px; min-height: 40px" data-bs-dismiss="modal">@L["Send"]</button>
+        </div>
+    </abp-modal>
+</div>

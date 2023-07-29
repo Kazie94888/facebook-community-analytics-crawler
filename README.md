@@ -1,2 +1,1 @@
-# lookon.vn
- work clone
+# lookon.vn.bo

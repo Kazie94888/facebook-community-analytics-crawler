@@ -1,0 +1,26 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using LookOn.Localization
+@inject IHtmlLocalizer<LookOnResource> L
+
+@{
+    Layout = null;
+}
+
+<abp-card>
+    <abp-card-header >
+        <abp-row class="p-4">
+            <abp-column size-xl="_3" size-md="_12">
+                <img src="~/images/subscription-img.png" width="auto" height="auto" alt=""/>
+            </abp-column>
+            <abp-column size-xl="_9" size-md="_12">
+                <h2>
+                    @L["Dashboard.SocialCommunityVerify.Title"]
+                </h2>
+                <p class="mt-3">
+                    @L["Dashboard.SocialCommunityVerify.Content"]
+                </p>
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+</abp-card>

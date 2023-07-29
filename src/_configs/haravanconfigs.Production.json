@@ -1,0 +1,18 @@
+{
+  "HaravanConfiguration" :{
+    "response_mode": "form_post",
+    "url_authorize": "https://accounts.haravan.com/connect/authorize",
+    "url_connect_token": "https://accounts.haravan.com/connect/token",
+    "grant_type": "authorization_code",
+    "nonce": "abcxyz123",
+    "response_type": "code id_token",
+    "app_id": "df8b8031a5e3002449a9ce6285bb9250",
+    "app_secret": "b88afd9700993d6429eb442eead5ce9665d2c29cb220112660c5b96ba04045f9",
+    "scope_login": "openid profile email org userinfo offline_access com.read_customers com.read_shippings com.read_orders com.read_shop",
+    "login_callback_url": "https://lookon.azurewebsites.net/haravan/install/login-callback?uid={0}",
+    "webhook": {
+      "hrVerifyToken": "bOL3XFfZabhKe6dnJfCJuTAfi37dFchQ",
+      "subscribe": "https://webhook.haravan.com/api/subscribe"
+    }
+  }
+}

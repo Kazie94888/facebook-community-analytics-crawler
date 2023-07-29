@@ -1,0 +1,63 @@
+﻿@using LookOn.Consts
+@using LookOn.Core.Consts
+@using LookOn.Core.Extensions
+@using LookOn.Localization
+@using LookOn.Web.Pages.Shared
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ProgressBar
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Table
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tooltip
+@model IList<LookOn.Dashboards.DashboardBase.SocialMetric_LocationByProvinceDto>
+@inject IHtmlLocalizer<LookOnResource> L
+<abp-card>
+    <abp-card-body>
+        <abp-row>
+            <abp-column size-md="_12">
+                <div class="display-inline-bl font-size-30">@L["Page1.DashboardCustomerByCity.Title"]</div>
+                <abp-button class="display-inline-bl float-end shadow-none question-tooltip-margin" abp-tooltip-left="@L["Page1.DashboardCustomerByCity.Hint"].Value">
+                    <span class="lo-help-icon"></span>
+                </abp-button>
+            </abp-column>
+            <abp-column size-md="_12">
+                @if (Model is not null && Model.Count > 0)
+                {
+                    <abp-table border-style="Borderless" striped-rows="false" class="table-top-products">
+                        <thead>
+                        <tr>
+                            <th class="veek-support-current-font " scope="Column"></th>
+                            <th class="veek-support-current-font " scope="Column">@L["Page1.DashboardCustomerByCity.Province"]</th>
+                            <th class="veek-support-current-font " scope="Column">@L["Page1.DashboardCustomerByCity.Interested"]</th>
+                            <th class="veek-support-current-font " scope="Column">@L["Page1.DashboardCustomerByCity.Rate"]</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        @foreach (var province in Model)
+                        {
+                            <tr>
+                                <th style="width: 1%" scope="Row">@((Model.IndexOf(province) + 1).ToString("D2"))</th>
+                                <td style="width: 5%">@province.Name</td>
+                                <td style="width: 10%">
+                                    <abp-progress-bar value="@province.Percent.ToDouble()" class="@Model.IndexOf(province).GetProgressColorClass()"/>
+                                </td>
+                                <td style="width: 5%">
+                                    @province.Percent.ToPositivePercent()
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </abp-table>
+                }
+                else
+                {
+                    <tr>
+                        <th colspan="5">@await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = true }, ViewData)</th>
+                    </tr>
+                }
+            </abp-column>
+        </abp-row>
+    </abp-card-body>
+</abp-card>

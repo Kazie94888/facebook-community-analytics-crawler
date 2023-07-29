@@ -1,0 +1,167 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+    <RootNamespace>LookOn.Web</RootNamespace>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
+    <PreserveCompilationReferences>true</PreserveCompilationReferences>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Humanizer" Version="2.14.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="4.0.0" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Autofac" Version="5.1.4" />
+    
+    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="5.1.4" />
+
+    <PackageReference Include="Serilog.AspNetCore" Version="4.0.0" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="8.4.1" />
+
+
+    <PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="5.1.4" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.Client" Version="5.1.4" />
+    <PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" Version="5.1.4" />
+    <PackageReference Include="Volo.Abp.Http.Client.Web" Version="5.1.4" />
+    <PackageReference Include="Volo.Abp.Swashbuckle" Version="5.1.4" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Web" Version="5.1.4" />
+    <PackageReference Include="Volo.Abp.AuditLogging.Web" Version="5.1.4" />
+    <PackageReference Include="Volo.Abp.Identity.Pro.Web" Version="5.1.4" />
+    <PackageReference Include="Volo.Abp.Account.Pro.Admin.Web" Version="5.1.4" />
+    <PackageReference Include="Volo.Abp.Account.Pro.Public.Web.Impersonation" Version="5.1.4" />
+    <PackageReference Include="Volo.Abp.LeptonTheme.Management.Web" Version="5.1.4" />
+    <PackageReference Include="Volo.Abp.IdentityServer.Web" Version="5.1.4" />
+    <PackageReference Include="Volo.Abp.LanguageManagement.Web" Version="5.1.4" />
+    <PackageReference Include="Volo.Saas.Host.Web" Version="5.1.4" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton" Version="5.1.4" />
+    <PackageReference Include="Volo.Abp.TextTemplateManagement.Web" Version="5.1.4" />
+    <ProjectReference Include="..\LookOn.Core\LookOn.Core.csproj" />
+    <ProjectReference Include="..\LookOn.HttpApi.Client\LookOn.HttpApi.Client.csproj" />
+    <ProjectReference Include="..\LookOn.HttpApi\LookOn.HttpApi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Compile Include="Pages\MerchantDashboard\Components\DashboardTotalRevenue\DashboardTotalRevenueViewComponent.cs" />
+    <Compile Include="Pages\MerchantDashboard\Components\DashboardTotalRevenue\DashboardTotalRevenueViewComponent.cs" />
+    <Content Remove="Logs\**" />
+    <Content Include="Pages\MerchantDashboard\Components\DashboardTotalRevenue\Default.cshtml" />
+    <Content Include="Pages\MerchantDashboard\Components\DashboardTotalRevenue\Default.cshtml" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
+    <Content Update="wwwroot\js\mapvietnamdata.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Remove="Pages\MerchantDashboard\Components\DashboardTotalRevenue\**" />
+    <Compile Remove="Pages\MerchantDashboard\Components\DashboardTotalRevenue\**" />
+    <EmbeddedResource Remove="Pages\MerchantDashboard\Components\DashboardTotalRevenue\**" />
+    <None Remove="Pages\MerchantDashboard\Components\DashboardTotalRevenue\**" />
+    <Content Remove="Pages\MerchantDashboard\Components\DashboardTopSummary\**" />
+    <Compile Remove="Pages\MerchantDashboard\Components\DashboardTopSummary\**" />
+    <EmbeddedResource Remove="Pages\MerchantDashboard\Components\DashboardTopSummary\**" />
+    <None Remove="Pages\MerchantDashboard\Components\DashboardTopSummary\**" />
+    <Content Remove="Pages\MerchantDashboard\Components\DashboardTopProduct\**" />
+    <Compile Remove="Pages\MerchantDashboard\Components\DashboardTopProduct\**" />
+    <EmbeddedResource Remove="Pages\MerchantDashboard\Components\DashboardTopProduct\**" />
+    <None Remove="Pages\MerchantDashboard\Components\DashboardTopProduct\**" />
+    <Content Remove="Pages\MerchantDashboard\Components\DashboardCustomerDetail\**" />
+    <Compile Remove="Pages\MerchantDashboard\Components\DashboardCustomerDetail\**" />
+    <EmbeddedResource Remove="Pages\MerchantDashboard\Components\DashboardCustomerDetail\**" />
+    <None Remove="Pages\MerchantDashboard\Components\DashboardCustomerDetail\**" />
+    <Content Remove="Pages\MerchantDashboard\Components\DashboardSocial\**" />
+    <Compile Remove="Pages\MerchantDashboard\Components\DashboardSocial\**" />
+    <EmbeddedResource Remove="Pages\MerchantDashboard\Components\DashboardSocial\**" />
+    <None Remove="Pages\MerchantDashboard\Components\DashboardSocial\**" />
+    <Content Remove="Pages\MerchantDashboard\Components\DashboardTotalRevenueByLocation\**" />
+    <Compile Remove="Pages\MerchantDashboard\Components\DashboardTotalRevenueByLocation\**" />
+    <EmbeddedResource Remove="Pages\MerchantDashboard\Components\DashboardTotalRevenueByLocation\**" />
+    <None Remove="Pages\MerchantDashboard\Components\DashboardTotalRevenueByLocation\**" />
+    <Content Update="wwwroot\libs\veek-libs\veek.css">
+      <DependentUpon>veek.scss</DependentUpon>
+    </Content>
+    <Compile Update="Pages\MerchantConnects\ConnectCommunityModal.cshtml.cs">
+      <DependentUpon>ConnectCommunityModal.cshtml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Shared\CommunityIntegrationNotificationModel.cs">
+      <DependentUpon>CommunityIntegrationNotificationModal.cshtml</DependentUpon>
+    </Compile>
+    <Content Update="Pages\Insights\venn.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Compile Update="Pages\Shared\Feedback.cs">
+      <DependentUpon>Feedback.cshtml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Pages\**\*.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Pages\**\*.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\_configs\globalconfigs.json" Link="Configs\globalconfigs.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\HaravanStores\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Components\DashboardCustomerDetail\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Components\DashboardTopProduct\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Components\DashboardTopSummary\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Components\DashboardTotalRevenue\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Themes\Lepton\Layouts\Layouts\Account\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Themes\Lepton\Layouts\Layouts\Account\_Footer.cshtml" />
+    <_ContentIncludedByDefault Remove="Themes\Lepton\Layouts\Layouts\Application\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Themes\Lepton\Layouts\Layouts\Application\Default2.cshtml" />
+    <_ContentIncludedByDefault Remove="Themes\Lepton\Layouts\Layouts\Application\Demo\ThemeSettings.cshtml" />
+    <_ContentIncludedByDefault Remove="Themes\Lepton\Layouts\Layouts\Application\_Footer.cshtml" />
+    <_ContentIncludedByDefault Remove="Themes\Lepton\Layouts\Layouts\Empty\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Themes\Lepton\Layouts\Layouts\Public\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Themes\Lepton\Layouts\Layouts\Public\_Footer.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Manage.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Subscriptions\CreateModal.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Subscriptions\EditModal.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Subscriptions\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Platforms\Components\HaravanPlatform\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\SocialOverview\Components\DashboardSocial\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\MerchantDashboard\Components\DashboardCustomerByCity\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\MerchantDashboard\Components\DashboardCustomerDetail\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\MerchantDashboard\Components\DashboardOtherCustomer\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\MerchantDashboard\Components\DashboardSocial\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\MerchantDashboard\Components\DashboardTopProduct\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\MerchantDashboard\Components\DashboardTopSummary\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\MerchantDashboard\Components\DashboardTotalRevenue\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\MerchantDashboard\Components\DashboardTotalRevenueByLocation\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\SocialOverview\Components\DashboardCustomerCompare\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\SocialOverview\Components\SocialDashboardCustomerByCity\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\SocialOverview\Components\SocialDashboardCustomerDetail\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\SocialOverview\Components\SocialDashboardSocial\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\SocialOverview\Components\SocialOverviewDashboard\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\SegmentInsights\Components\InsightCustomerDetail\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\SegmentInsights\Components\InsightDashboardSocial\Default.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\MerchantDashboard\Components\DashboardCustomerByCity\Default.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Pages\Insights\PartialViews" />
+    <Folder Include="Pages\SegmentInsights\PartialViews\Js" />
+    <Folder Include="wwwroot\libs\venn-chart" />
+  </ItemGroup>
+</Project>

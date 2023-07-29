@@ -1,0 +1,81 @@
+﻿@using LookOn.Core.Consts
+@using LookOn.Core.Extensions
+@using LookOn.Localization
+@using LookOn.Web.Pages.Shared
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
+@model LookOn.Dashboards.DashboardBase.EcomMetric_RevenueSummaryDto
+@inject IHtmlLocalizer<LookOnResource> L
+
+<abp-card>
+    <abp-card-body>
+        <abp-row>
+            <abp-column size-md="_11">
+                <div class="display-inline-bl font-size-30">@L[$"Page1.DashboardTotalRevenue.{ViewData["TimeTitle"]}Title"]</div>
+            </abp-column>
+            <abp-column size-md="_1">
+                <abp-button class="display-inline-bl float-end shadow-none question-tooltip-margin question-tooltip-margin" abp-tooltip-left="@L[$"Page1.DashboardTotalRevenue.Hint"].Value">
+                    <span class="lo-help-icon"></span>
+                </abp-button>
+            </abp-column>
+            @if (Model.RevenueByDates.IsNotNullOrEmpty())
+            {
+                <abp-column size-xl="_9" size-md="_8">
+                    <div id="barChartContainer"></div>
+                </abp-column>
+                <abp-column size-xl="_3" size-md="_4" class="revenue-total-container">
+                    <abp-card class="justify-content-center box-chart-center">
+                        <abp-card-body style="padding: 0">
+                            <div style="display: grid;align-content: space-evenly;height: 100%;">
+                                @if (Model.RevenueToday != 0)
+                                {
+                                    <div>
+                                        <div class="text-center">
+                                            <div>
+                                                <span style="line-height: 1.5;font-size: 36px" class="font-weight-700">@Model.RevenueToday.FormatCurrency(1)</span>
+                                                <sup style="top: -1em;font-size: 14px;">@Model.RevenueToday.Numeral()</sup>
+                                                <span style='margin: auto 0 auto 10px' class=" @Model.RevenueTodayGrowthPercent.GetColorClass()">
+                                                    <i class="@Model.RevenueTodayGrowthPercent.GetArrowClass()"></i> @Model.RevenueTodayGrowthPercent.FormatNumber().ToPositivePercent()
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="text-center veek-support-current-font" style="font-size: 20px">
+                                            @L["Page1.DashboardTotalRevenue.RevenueToday"]
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.RevenueToday != 0 && Model.Revenue != 0)
+                                {
+                                    <div style="border: solid 1px rgb(231 231 231); width: 100%;">
+                                    </div>
+                                }
+                                @if (Model.Revenue != 0)
+                                {
+                                    <div>
+                                        <div class="text-center">
+                                            <span style="line-height: 1.5;font-size: 36px" class="font-weight-700">@Model.Revenue.FormatCurrency(1)</span>
+                                            <sup style="top: -1em;font-size: 14px;">@Model.Revenue.Numeral()</sup>
+                                            <span style='margin: auto 0 auto 10px' class=" @Model.RevenueGrowthPercent.GetColorClass()">
+                                                <i class="@Model.RevenueGrowthPercent.GetArrowClass()"></i> @Model.RevenueGrowthPercent.FormatNumber().ToPositivePercent()
+                                            </span>
+                                        </div>
+
+                                        <div class="text-center veek-support-current-font" style="font-size: 20px">
+                                            @L[$"Page1.DashboardTotalRevenue.Revenue{ViewData["TimeTitle"]}"]
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </abp-card-body>
+                    </abp-card>
+
+                </abp-column>
+            }
+            else
+            {
+                @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() { HasContent = true }, ViewData)
+            }
+        </abp-row>
+    </abp-card-body>
+</abp-card>

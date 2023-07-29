@@ -1,0 +1,71 @@
+@page
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using LookOn.Permissions
+@using LookOn.Web.Pages.UserInfos
+@using LookOn.Web.Menus
+@using Microsoft.AspNetCore.Mvc.Localization
+@using LookOn.Localization
+@inject IHtmlLocalizer<LookOnResource> L
+@inject IAuthorizationService Authorization
+@model IndexModel
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = L["UserInfos"].Value;
+    PageLayout.Content.MenuItemName = LookOnMenus.UserInfos;
+}
+
+@section scripts
+{
+    <abp-script src="/Pages/UserInfos/index.js" />
+}
+
+@section content_toolbar {
+    @if (await Authorization.IsGrantedAsync(LookOnPermissions.UserInfos.Create))
+    {
+        <abp-button id="NewUserInfoButton" text="@L["NewUserInfo"].Value" icon="plus" button-type="Primary" />
+    }
+}
+
+<abp-card>
+    <abp-card-body>
+		<abp-row class="mb-3">
+            <abp-column size-md="_12">
+                <form id="SearchForm" autocomplete="off">
+                    <div class="input-group">
+                        <input class="form-control page-search-filter-text" id="FilterText" placeholder="@L["Search"]"/>
+                        <abp-button button-type="Primary" type="submit" icon="search"/>
+                    </div>
+                </form>
+            </abp-column>
+            <abp-column size-md="_12" class="mt-3">
+                <a href="javascript:;" id="AdvancedFilterSectionToggler" class="text-decoration-none">@L["SeeAdvancedFilters"]</a>
+            </abp-column>
+        </abp-row>
+
+        <abp-row id="AdvancedFilterSection" style="display: none;">
+            <abp-column size="_3">
+                <abp-input asp-for="IdentificationNumberFilter" label="@L["IdentificationNumber"].Value" />
+            </abp-column>
+                <abp-column size="_3">
+                    <label for="AppUser_Filter_UserName">@L["User"]</label>
+                    <div class="input-group mb-3 mt-2">
+                        <input hidden id="AppUserIdFilter" />
+                        <input type="text" id="AppUser_Filter_UserName" class="form-control" disabled>
+                        <abp-button button-type="Info" id="AppUserFilterLookupOpenButton" class="text-light">@L["Pick"]</abp-button>
+                        <abp-button button-type="Danger" class="lookupCleanButton ms-1"><i class="fa fa-times"></i></abp-button>
+                    </div>
+                </abp-column>
+        </abp-row>
+
+        <abp-table striped-rows="true" id="UserInfosTable">
+            <thead>
+				<tr>
+					<th>@L["Actions"]</th>
+					<th>@L["IdentificationNumber"]</th>
+					<th>@L["User"]</th>
+				</tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>

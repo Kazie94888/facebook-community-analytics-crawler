@@ -1,0 +1,113 @@
+﻿@using LookOn.Consts
+@using LookOn.Core.Consts
+@using LookOn.Core.Extensions
+@using LookOn.Localization
+@using LookOn.Web.Pages.Shared
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tooltip
+@model LookOn.Dashboards.Page1.Page1Metric_AdvancedDto
+@inject IHtmlLocalizer<LookOnResource> L
+<abp-card id="dashboard-top-metric">
+    <abp-card-body>
+        <abp-row class="mb-5">
+            <abp-column size-md="_12">
+                <div class="display-inline-bl font-size-30">@L["Page1.DashboardOther.Title"]</div>
+                <abp-button class="display-inline-bl float-end shadow-none question-tooltip-margin" abp-tooltip-left="@L["Page1.DashboardOther.Hint"].Value">
+                    <span class="lo-help-icon"></span>
+                </abp-button>
+            </abp-column>
+
+            <abp-column size-xl="_3" size-md="_6" size-sm="_6">
+                <abp-row style="text-align: center;">
+                    <abp-column>
+                        @if (Model.EcomCustomersNoOrderInXMonthsCount > 0)
+                        {
+                            <h2 class="display-inline-bl font-size-40 font-weight-700">@Model.EcomCustomersNoOrderInXMonthsCount.FormatNumber()</h2>
+                            <b class="@Model.EcomCustomersNoOrderInXMonthsPercent.GetColorClass(@Model.IsEcomCustomersNoOrderInXMonthsPositive) display-inline-bl"> @Model.EcomCustomersNoOrderInXMonthsPercent.ToPositivePercent()</b>
+                        }
+                        else
+                        {
+                            @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() {HasContent = false}, ViewData)
+                        }
+                    </abp-column>
+                    <abp-column size-md="_12">
+                        <div class="veek-support-current-font ">@L["Page1.DashboardOther.UserNotBuyInXMonths", ViewData["Ecom_RetentionThresholdInMonth"]]</div>
+                    </abp-column>
+                </abp-row>
+            </abp-column>
+
+
+            <abp-column size-xl="_3" size-md="_6" size-sm="_6">
+                <abp-row style="text-align: center">
+                    <abp-column>
+                        @if (Model.AverageOrderValueComparedToTheWorld > 0)
+                        {
+                            <h2 class="display-inline-bl font-size-40 font-weight-700">@((decimal)ViewData["OrderTotalKPI"] == 0 ? "---" : Model.AverageOrderValueComparedToTheWorld.FormatNumber())</h2>
+                        }
+                        else
+                        {
+                            @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() {HasContent = false}, ViewData)
+                        }
+                    </abp-column>
+                    <abp-column size-md="_12">
+                        @if ((decimal)ViewData["OrderTotalKPI"] == 0)
+                        {
+                            <span class="veek-support-current-font ">@L["Page1.DashboardOther.ConfigurationOrderKPI"]</span>
+                        }
+                        else
+                        {
+                            <span class="veek-support-current-font ">@(@Model.AverageOrderValueComparedToTheWorldPercent >= 100 ? L["Page1.DashboardOther.AverageOrderValueMoreThanWorldTitle", (Model.AverageOrderValueComparedToTheWorldPercent - 100).ToPositivePercent()] : L["Page1.DashboardOther.AverageOrderValueLessThanWorldTitle", (100 - Model.AverageOrderValueComparedToTheWorldPercent).ToPositivePercent()])</span>
+                        }
+                    </abp-column>
+                </abp-row>
+            </abp-column>
+
+
+            <abp-column size-xl="_3" size-md="_6" size-sm="_6">
+                <abp-row style="text-align: center">
+                    <abp-column>
+                        @if (Model.FirstPurchasedCustomersCount > 0)
+                        {
+                            <h2 class="display-inline-bl font-size-40 font-weight-700">@Model.FirstPurchasedCustomersCount.FormatNumber()</h2>
+                            <b class="@Model.FirstPurchasedCustomersPercent.GetColorClass(@Model.IsFirstPurchasedCustomerPositive) display-inline-bl">
+                                @Model.FirstPurchasedCustomersPercent.ToPositivePercent()
+                            </b>
+                        }
+                        else
+                        {
+                            @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() {HasContent = false}, ViewData)
+                        }
+                    </abp-column>
+                    <abp-column size-md="_12">
+                        <span class="veek-support-current-font ">@L["Page1.DashboardOther.UserOnly1Order"]</span>
+                    </abp-column>
+                </abp-row>
+            </abp-column>
+
+
+            <abp-column size-xl="_3" size-md="_6" size-sm="_6">
+                <abp-row style="text-align: center">
+                    <abp-column>
+                        @if (Model.RevenueEcomCustomerHasMoreThan1000FollowerAndFriend > 0)
+                        {
+                            <h2 class="display-inline-bl font-size-40 font-weight-700">@Model.RevenueEcomCustomerHasMoreThan1000FollowerAndFriend.FormatNumber()</h2>
+                            <b class="veek-positive-current-font  display-inline-bl">
+                                @Model.RevenueEcomCustomerHasMoreThan1000FollowerAndFriendPercent.ToPositivePercent()
+                            </b>
+                        }
+                        else
+                        {
+                            @await Html.PartialAsync("Shared/FeatureUpdatingPartial", new FeatureUpdatingModel() {HasContent = false}, ViewData)
+                        }
+                    </abp-column>
+                    <abp-column size-md="_12">
+                        <span class="veek-support-current-font ">@L["Page1.DashboardOther.1000FollowedUserContribute"]</span>
+                    </abp-column>
+                </abp-row>
+            </abp-column>
+        </abp-row>
+    </abp-card-body>
+</abp-card>
