@@ -25,9 +25,9 @@
       "Crawl_MaxThread_SelectiveGroupPost":3      
     },
     "ApiConfig": {
-      "ApiUrl": "https://tool.sgcholacxoong.com/api",
-      "ApiEmailUrl" : "https://api.gdll.vn/api",
-      "ViotpUrl": "https://api.viotp.com"
+      "ApiUrl": "ApiUrl",
+      "ApiEmailUrl" : "ApiEmailUrl",
+      "ViotpUrl": "ViotpUrl"
     }
   }
 }
